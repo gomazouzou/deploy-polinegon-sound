@@ -396,6 +396,8 @@ function App() {
         }
 
         const  stopDrawing = () => {
+          console.log('stopDrawing called'); // stopDrawingが呼び出された時にログ出力
+
           if (!context) return;
           isDrawing.current = false;
           context.beginPath();
