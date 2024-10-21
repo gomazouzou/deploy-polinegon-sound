@@ -389,6 +389,7 @@ function App() {
         }
 
         const startDrawing = (event : PointerEvent) => {
+          console.log('startDrawing called');
           isDrawing.current = true;
           prevX = event.offsetX;
           prevY = event.offsetY;
