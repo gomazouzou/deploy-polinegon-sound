@@ -338,213 +338,316 @@ function App() {
     beatCountRef.current = (beatCountRef.current + 1) % (PROCESS_SPAN * 2);
   }
 
+  // useEffect(() => {
+  //   if (layers.length === 0) return;
+  //   const layer = layers.find(layer => layer.id === currentLayerId);
+  //   if(layer && isPlaying){
+
+  //     //線レイヤーの場合の描画処理
+  //     if(layer.type === Type.Line && !clickFigureDrawing){
+  //       const canvas =layer.ref.current;
+  //       if (!canvas) return;
+  //       const context = canvas.getContext('2d');
+
+  //       let prevX: number | null = null;
+  //       let prevY: number | null = null;
+
+  //       const draw = (event: PointerEvent) => {
+  //         if (!isDrawing.current || !context || !layer) return;
+
+  //         event.preventDefault();// スクロール防止
+
+  //         // ペンのスタイルを設定
+  //         context.lineWidth = layer.lineWidth; 
+  //         context.lineCap = 'round'; 
+  //         context.strokeStyle = layer.color;
+
+  //         const currentX: number = event.offsetX;
+  //         const currentY: number = event.offsetY;
+
+  //         mousePositionRef.current = { x: currentX, y: currentY };
+          
+  //         // マウスの位置に線を描画
+  //         context.lineTo(currentX, currentY);
+  //         context.stroke();
+  //         context.beginPath();
+  //         context.moveTo(currentX, currentY);
+
+  //         // 描画内容を保存
+  //         setLayers(prevLayers => prevLayers.map(layer => {
+  //           if (layer.id === currentLayerId && prevX && prevY) {
+  //             return {
+  //               ...layer,
+  //               drawings: [...layer.drawings, { startX: prevX, startY: prevY, endX: currentX, endY: currentY, count: drawCount }]
+  //             };
+  //           }
+  //           else{
+  //             return layer;
+  //           }
+  //         }));
+          
+  //         prevX = currentX;
+  //         prevY = currentY;
+  //       }
+
+  //       const startDrawing = (event : PointerEvent) => {
+  //         event.preventDefault(); // スクロール防止
+  //         isDrawing.current = true;
+  //         prevX = event.offsetX;
+  //         prevY = event.offsetY;
+  //         draw(event);
+  //       }
+
+  //       const  stopDrawing = () => {
+  //         if (!context) return;
+  //         isDrawing.current = false;
+  //         context.beginPath();
+  //         prevX = null;
+  //         prevY = null;
+  //         setDrawCount(drawCount + 1); 
+
+  //         let currentNoteArray: number[] = [];
+          
+  //         switch (quantizeRef.current) {
+  //           case 2:
+  //             currentNoteArray = [...noteArrayRef2.current];
+  //             break;
+  //           case 4:
+  //             currentNoteArray = [...noteArrayRef4.current];
+  //             break;
+  //           case 8:
+  //             currentNoteArray = [...noteArrayRef8.current];
+  //             break;
+  //           case 16:
+  //             currentNoteArray = [...noteArrayRef16.current];
+  //             break;
+  //         }
+
+  //         setLoops(prevLoop => {
+  //           const newLoop = [...prevLoop, 
+  //             { 
+  //               id: totalLoop,
+  //               type: Type.Line, 
+  //               layer_id: currentLayerId, 
+  //               color: layer.color,
+  //               lineWidth: layer.lineWidth,
+  //               instrument: ChangeColorToInstrumentId(layer.color), 
+  //               figure_id: 0, 
+  //               volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
+  //               midi: currentNoteArray,
+  //               ref: React.createRef<HTMLCanvasElement>(),
+  //               animation: [] //後で追記
+  //             }
+  //           ];
+  //           return newLoop;
+  //         });
+  //         setTotalLoop(totalLoop + 1);
+
+  //         noteArrayRef2.current = Array(4).fill(0);
+  //         noteArrayRef4.current = Array(8).fill(0);
+  //         noteArrayRef8.current = Array(16).fill(0);
+  //         noteArrayRef16.current = Array(32).fill(0);
+  //       }
+
+  //       canvas.addEventListener('pointerdown', startDrawing);
+  //       canvas.addEventListener('pointermove', draw);
+  //       canvas.addEventListener('pointerup', stopDrawing);
+  //       canvas.addEventListener('pointerout', stopDrawing);
+
+  //       return () => {
+  //         canvas.removeEventListener('pointerdown', startDrawing);
+  //         canvas.removeEventListener('pointermove', draw);
+  //         canvas.removeEventListener('pointerup', stopDrawing);
+  //         canvas.removeEventListener('pointerout', stopDrawing);
+  //       };
+  //     };
+
+  //     //図形レイヤーの場合の描画処理
+  //     if(layer.type === Type.Poligone && !clickFigureDrawing){
+  //       const canvas = layer.ref.current;
+  //       if (!canvas) return;
+  //       const context = canvas.getContext('2d');
+
+  //       const drawFigure = (event: PointerEvent) => {
+  //         const centerX = event.offsetX;
+  //         const centerY = event.offsetY;
+
+  //         switch (currentFigure) {
+  //           case 0:
+  //             drawFigure00(context, layer, centerX, centerY);
+  //             break;
+  //           case 1:
+  //             drawFigure01(context, layer, centerX, centerY);
+  //             break;
+  //           case 2:
+  //             drawFigure02(context, layer, centerX, centerY);
+  //             break;
+  //           case 3:
+  //             drawFigure03(context, layer, centerX, centerY);
+  //             break;
+  //           default:
+  //             break;
+  //         }
+          
+  //         // 描画内容を保存
+  //         setLayers(prevLayers => prevLayers.map(layer => {
+  //           if (layer.id === currentLayerId) {
+  //             return {
+  //               ...layer,
+  //               figures: [...layer.figures, { id: currentFigure, x_pos: centerX, y_pos: centerY }]
+  //             };
+  //           }
+  //           else{
+  //             return layer;
+  //           }
+  //         }));
+
+  //         //ループ情報の設定
+  //         setLoops(prevLoop => {
+  //           const newLoop = [...prevLoop, 
+  //             { 
+  //               id: totalLoop,
+  //               type: Type.Poligone, 
+  //               layer_id: currentLayerId, 
+  //               color: layer.color,
+  //               lineWidth: layer.lineWidth,
+  //               instrument: ChangeColorToInstrumentId(layer.color), 
+  //               figure_id: currentFigure, 
+  //               volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
+  //               midi: [],
+  //               ref: React.createRef<HTMLCanvasElement>(),
+  //               animation: ChangeFigureToAnimation(currentFigure, centerX, centerY),
+  //             }
+  //           ];
+  //           setTotalLoop(totalLoop + 1);
+  //           return newLoop;
+  //         });
+  //       }
+        
+  //       canvas.addEventListener('pointerdown', drawFigure);
+
+  //       return () => {
+  //         canvas.removeEventListener('pointerdown', drawFigure);
+  //       };
+  //     };
+
+  //     //自由図形レイヤーの場合の描画処理
+  //     if(layer.type === Type.Free && clickFigureDrawing){
+  //       const canvas = layer.ref.current;
+  //       if (!canvas) return;
+
+  //       canvas.addEventListener('click', () => { isClicking.current = true});
+
+  //       return () => {
+  //         canvas.removeEventListener('click', () => { isClicking.current = true});
+  //       };
+
+  //     }
+  //   };  
+  // }, [isDrawing, canvasColor, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking]);
+
   useEffect(() => {
     if (layers.length === 0) return;
-    const layer = layers.find(layer => layer.id === currentLayerId);
-    if(layer && isPlaying){
-
-      //線レイヤーの場合の描画処理
-      if(layer.type === Type.Line && !clickFigureDrawing){
-        const canvas =layer.ref.current;
+    const layer = layers.find((layer) => layer.id === currentLayerId);
+    if (layer && isPlaying) {
+      if (layer.type === Type.Line && !clickFigureDrawing) {
+        const canvas = layer.ref.current;
         if (!canvas) return;
-        const context = canvas.getContext('2d');
-
+        const context = canvas.getContext("2d");
+  
         let prevX: number | null = null;
         let prevY: number | null = null;
-
+  
         const draw = (event: PointerEvent) => {
-          if (!isDrawing.current || !context || !layer) return;
-
-          event.preventDefault();// スクロール防止
-
-          // ペンのスタイルを設定
-          context.lineWidth = layer.lineWidth; 
-          context.lineCap = 'round'; 
+          if (!isDrawing.current || !context) return;
+  
+          event.preventDefault(); // スクロール防止
+  
+          context.lineWidth = layer.lineWidth;
+          context.lineCap = "round";
           context.strokeStyle = layer.color;
-
-          const currentX: number = event.offsetX;
-          const currentY: number = event.offsetY;
-
+  
+          const currentX = event.offsetX;
+          const currentY = event.offsetY;
+  
           mousePositionRef.current = { x: currentX, y: currentY };
-          
-          // マウスの位置に線を描画
+  
           context.lineTo(currentX, currentY);
           context.stroke();
           context.beginPath();
           context.moveTo(currentX, currentY);
-
-          // 描画内容を保存
-          setLayers(prevLayers => prevLayers.map(layer => {
-            if (layer.id === currentLayerId && prevX && prevY) {
-              return {
-                ...layer,
-                drawings: [...layer.drawings, { startX: prevX, startY: prevY, endX: currentX, endY: currentY, count: drawCount }]
-              };
-            }
-            else{
-              return layer;
-            }
-          }));
-          
+  
+          setLayers((prevLayers) =>
+            prevLayers.map((l) =>
+              l.id === currentLayerId && prevX !== null && prevY !== null
+                ? {
+                    ...l,
+                    drawings: [
+                      ...l.drawings,
+                      {
+                        startX: prevX,
+                        startY: prevY,
+                        endX: currentX,
+                        endY: currentY,
+                        count: drawCount,
+                      },
+                    ],
+                  }
+                : l
+            )
+          );
+  
           prevX = currentX;
           prevY = currentY;
-        }
-
-        const startDrawing = (event : PointerEvent) => {
-          event.preventDefault(); // スクロール防止
-          isDrawing.current = true;
-          prevX = event.offsetX;
-          prevY = event.offsetY;
-          draw(event);
-        }
-
-        const  stopDrawing = () => {
+        };
+  
+        const startDrawing = (event: PointerEvent) => {
+          if (event.pointerType === "pen" || event.pointerType === "mouse") {
+            event.preventDefault(); // スクロール防止
+            isDrawing.current = true;
+            prevX = event.offsetX;
+            prevY = event.offsetY;
+            draw(event);
+          }
+        };
+  
+        const stopDrawing = () => {
           if (!context) return;
           isDrawing.current = false;
           context.beginPath();
           prevX = null;
           prevY = null;
-          setDrawCount(drawCount + 1); 
-
-          let currentNoteArray: number[] = [];
-          
-          switch (quantizeRef.current) {
-            case 2:
-              currentNoteArray = [...noteArrayRef2.current];
-              break;
-            case 4:
-              currentNoteArray = [...noteArrayRef4.current];
-              break;
-            case 8:
-              currentNoteArray = [...noteArrayRef8.current];
-              break;
-            case 16:
-              currentNoteArray = [...noteArrayRef16.current];
-              break;
-          }
-
-          setLoops(prevLoop => {
-            const newLoop = [...prevLoop, 
-              { 
-                id: totalLoop,
-                type: Type.Line, 
-                layer_id: currentLayerId, 
-                color: layer.color,
-                lineWidth: layer.lineWidth,
-                instrument: ChangeColorToInstrumentId(layer.color), 
-                figure_id: 0, 
-                volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
-                midi: currentNoteArray,
-                ref: React.createRef<HTMLCanvasElement>(),
-                animation: [] //後で追記
-              }
-            ];
-            return newLoop;
-          });
-          setTotalLoop(totalLoop + 1);
-
+          setDrawCount((count) => count + 1);
+  
           noteArrayRef2.current = Array(4).fill(0);
           noteArrayRef4.current = Array(8).fill(0);
           noteArrayRef8.current = Array(16).fill(0);
           noteArrayRef16.current = Array(32).fill(0);
-        }
-
-        canvas.addEventListener('pointerdown', startDrawing);
-        canvas.addEventListener('pointermove', draw);
-        canvas.addEventListener('pointerup', stopDrawing);
-        canvas.addEventListener('pointerout', stopDrawing);
-
-        return () => {
-          canvas.removeEventListener('pointerdown', startDrawing);
-          canvas.removeEventListener('pointermove', draw);
-          canvas.removeEventListener('pointerup', stopDrawing);
-          canvas.removeEventListener('pointerout', stopDrawing);
         };
-      };
-
-      //図形レイヤーの場合の描画処理
-      if(layer.type === Type.Poligone && !clickFigureDrawing){
-        const canvas = layer.ref.current;
-        if (!canvas) return;
-        const context = canvas.getContext('2d');
-
-        const drawFigure = (event: PointerEvent) => {
-          const centerX = event.offsetX;
-          const centerY = event.offsetY;
-
-          switch (currentFigure) {
-            case 0:
-              drawFigure00(context, layer, centerX, centerY);
-              break;
-            case 1:
-              drawFigure01(context, layer, centerX, centerY);
-              break;
-            case 2:
-              drawFigure02(context, layer, centerX, centerY);
-              break;
-            case 3:
-              drawFigure03(context, layer, centerX, centerY);
-              break;
-            default:
-              break;
-          }
-          
-          // 描画内容を保存
-          setLayers(prevLayers => prevLayers.map(layer => {
-            if (layer.id === currentLayerId) {
-              return {
-                ...layer,
-                figures: [...layer.figures, { id: currentFigure, x_pos: centerX, y_pos: centerY }]
-              };
-            }
-            else{
-              return layer;
-            }
-          }));
-
-          //ループ情報の設定
-          setLoops(prevLoop => {
-            const newLoop = [...prevLoop, 
-              { 
-                id: totalLoop,
-                type: Type.Poligone, 
-                layer_id: currentLayerId, 
-                color: layer.color,
-                lineWidth: layer.lineWidth,
-                instrument: ChangeColorToInstrumentId(layer.color), 
-                figure_id: currentFigure, 
-                volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
-                midi: [],
-                ref: React.createRef<HTMLCanvasElement>(),
-                animation: ChangeFigureToAnimation(currentFigure, centerX, centerY),
-              }
-            ];
-            setTotalLoop(totalLoop + 1);
-            return newLoop;
-          });
-        }
-        
-        canvas.addEventListener('pointerdown', drawFigure);
-
+  
+        // `passive: false` を指定してイベントリスナーを設定
+        canvas.addEventListener("pointerdown", startDrawing, { passive: false });
+        canvas.addEventListener("pointermove", draw, { passive: false });
+        canvas.addEventListener("pointerup", stopDrawing);
+        canvas.addEventListener("pointerout", stopDrawing);
+  
         return () => {
-          canvas.removeEventListener('pointerdown', drawFigure);
+          canvas.removeEventListener("pointerdown", startDrawing);
+          canvas.removeEventListener("pointermove", draw);
+          canvas.removeEventListener("pointerup", stopDrawing);
+          canvas.removeEventListener("pointerout", stopDrawing);
         };
-      };
-
-      //自由図形レイヤーの場合の描画処理
-      if(layer.type === Type.Free && clickFigureDrawing){
-        const canvas = layer.ref.current;
-        if (!canvas) return;
-
-        canvas.addEventListener('click', () => { isClicking.current = true});
-
-        return () => {
-          canvas.removeEventListener('click', () => { isClicking.current = true});
-        };
-
       }
-    };  
-  }, [isDrawing, canvasColor, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking]);
+    }
+  }, [
+    isDrawing,
+    layers,
+    currentLayerId,
+    drawCount,
+    clickFigureDrawing,
+    isPlaying,
+  ]);
+  
 
   return (
     <>
