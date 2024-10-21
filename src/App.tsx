@@ -355,6 +355,8 @@ function App() {
         const draw = (event: PointerEvent) => {
           if (!isDrawing.current || !context || !layer) return;
 
+          event.preventDefault();// スクロール防止
+
           // ペンのスタイルを設定
           context.lineWidth = layer.lineWidth; 
           context.lineCap = 'round'; 
@@ -389,6 +391,7 @@ function App() {
         }
 
         const startDrawing = (event : PointerEvent) => {
+          event.preventDefault(); // スクロール防止
           isDrawing.current = true;
           prevX = event.offsetX;
           prevY = event.offsetY;
