@@ -352,7 +352,7 @@ function App() {
         let prevX: number | null = null;
         let prevY: number | null = null;
 
-        const draw = (event: MouseEvent) => {
+        const draw = (event: PointerEvent) => {
           if (!isDrawing.current || !context || !layer) return;
 
           // ペンのスタイルを設定
@@ -388,7 +388,7 @@ function App() {
           prevY = currentY;
         }
 
-        const startDrawing = (event : MouseEvent) => {
+        const startDrawing = (event : PointerEvent) => {
           isDrawing.current = true;
           prevX = event.offsetX;
           prevY = event.offsetY;
@@ -446,16 +446,16 @@ function App() {
           noteArrayRef16.current = Array(32).fill(0);
         }
 
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
+        canvas.addEventListener('pointerdown', startDrawing);
+        canvas.addEventListener('pointermove', draw);
+        canvas.addEventListener('pointerup', stopDrawing);
+        canvas.addEventListener('pointerout', stopDrawing);
 
         return () => {
-          canvas.removeEventListener('mousedown', startDrawing);
-          canvas.removeEventListener('mousemove', draw);
-          canvas.removeEventListener('mouseup', stopDrawing);
-          canvas.removeEventListener('mouseout', stopDrawing);
+          canvas.removeEventListener('pointerdown', startDrawing);
+          canvas.removeEventListener('pointermove', draw);
+          canvas.removeEventListener('pointerup', stopDrawing);
+          canvas.removeEventListener('pointerout', stopDrawing);
         };
       };
 
@@ -465,7 +465,7 @@ function App() {
         if (!canvas) return;
         const context = canvas.getContext('2d');
 
-        const drawFigure = (event: MouseEvent) => {
+        const drawFigure = (event: PointerEvent) => {
           const centerX = event.offsetX;
           const centerY = event.offsetY;
 
@@ -521,10 +521,10 @@ function App() {
           });
         }
         
-        canvas.addEventListener('mousedown', drawFigure);
+        canvas.addEventListener('pointerdown', drawFigure);
 
         return () => {
-          canvas.removeEventListener('mousedown', drawFigure);
+          canvas.removeEventListener('pointerdown', drawFigure);
         };
       };
 
