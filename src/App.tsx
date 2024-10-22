@@ -73,21 +73,36 @@ function App() {
   const [lineAudioSamplers, setLineAudioSamplers] = useState <Tone.Sampler[] | null>(null);
   const [figureAudioSamplers, setFigureAudioSamplers] = useState <Tone.Sampler[] | null>(null);
 
+  // useEffect(() => {
+  //   const disableScroll = (event) => {
+  //     event.preventDefault();
+  //   };
+  
+  //   // スクロール関連のイベントを無効化
+  //   window.addEventListener('wheel', disableScroll, { passive: false });
+  //   window.addEventListener('touchmove', disableScroll, { passive: false });
+  
+  //   return () => {
+  //     // クリーンアップ: イベントリスナーを解除
+  //     window.removeEventListener('wheel', disableScroll);
+  //     window.removeEventListener('touchmove', disableScroll);
+  //   };
+  // }, []);
   useEffect(() => {
     const disableScroll = (event) => {
-      event.preventDefault();
+      // 特定の要素（キャンバス）内でのみスクロール無効化
+      if (event.target.closest('canvas')) {
+        event.preventDefault();
+      }
     };
   
-    // スクロール関連のイベントを無効化
-    window.addEventListener('wheel', disableScroll, { passive: false });
     window.addEventListener('touchmove', disableScroll, { passive: false });
   
     return () => {
-      // クリーンアップ: イベントリスナーを解除
-      window.removeEventListener('wheel', disableScroll);
       window.removeEventListener('touchmove', disableScroll);
     };
   }, []);
+  
   
 
   useEffect(() => {
