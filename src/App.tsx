@@ -550,11 +550,22 @@ function App() {
         const canvas = layer.ref.current;
         if (!canvas) return;
 
-        canvas.addEventListener('click', () => { isClicking.current = true});
-
-        return () => {
-          canvas.removeEventListener('click', () => { isClicking.current = true});
+        const handlePointerDown = () => {
+          isClicking.current = true;
+          console.log('Canvas touched or clicked');
         };
+      
+        canvas.addEventListener('pointerdown', handlePointerDown);
+      
+        return () => {
+          canvas.removeEventListener('pointerdown', handlePointerDown);
+        };
+
+        // canvas.addEventListener('click', () => { isClicking.current = true});
+
+        // return () => {
+        //   canvas.removeEventListener('click', () => { isClicking.current = true});
+        // };
 
       }
     };  
