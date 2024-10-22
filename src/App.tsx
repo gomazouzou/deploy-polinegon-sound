@@ -13,7 +13,6 @@ import { Layer, Type } from "./types/layer.tsx";
 import { LoopInfo, Position } from './types/loop.tsx';
 
 function App() {
-  // console.log('start');
   const canvasColor = 'white';
   const isDrawing= useRef(false);
 
@@ -73,21 +72,6 @@ function App() {
   const [lineAudioSamplers, setLineAudioSamplers] = useState <Tone.Sampler[] | null>(null);
   const [figureAudioSamplers, setFigureAudioSamplers] = useState <Tone.Sampler[] | null>(null);
 
-  // useEffect(() => {
-  //   const disableScroll = (event) => {
-  //     event.preventDefault();
-  //   };
-  
-  //   // スクロール関連のイベントを無効化
-  //   window.addEventListener('wheel', disableScroll, { passive: false });
-  //   window.addEventListener('touchmove', disableScroll, { passive: false });
-  
-  //   return () => {
-  //     // クリーンアップ: イベントリスナーを解除
-  //     window.removeEventListener('wheel', disableScroll);
-  //     window.removeEventListener('touchmove', disableScroll);
-  //   };
-  // }, []);
   useEffect(() => {
     const disableScroll = (event) => {
       // 特定の要素（キャンバス）内でのみスクロール無効化
@@ -422,7 +406,6 @@ function App() {
         }
 
         const startDrawing = (event : PointerEvent) => {
-          console.log('startDrawing called');
           isDrawing.current = true;
           prevX = event.offsetX;
           prevY = event.offsetY;
@@ -430,8 +413,6 @@ function App() {
         }
 
         const  stopDrawing = () => {
-          console.log('stopDrawing called'); // stopDrawingが呼び出された時にログ出力
-
           if (!context) return;
           isDrawing.current = false;
           context.beginPath();
