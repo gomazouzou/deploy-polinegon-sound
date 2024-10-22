@@ -561,12 +561,6 @@ function App() {
           canvas.removeEventListener('pointerdown', handlePointerDown);
         };
 
-        // canvas.addEventListener('click', () => { isClicking.current = true});
-
-        // return () => {
-        //   canvas.removeEventListener('click', () => { isClicking.current = true});
-        // };
-
       }
     };  
   }, [isDrawing, canvasColor, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking]);
