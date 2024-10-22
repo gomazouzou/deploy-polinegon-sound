@@ -13,6 +13,7 @@ import { Layer, Type } from "./types/layer.tsx";
 import { LoopInfo, Position } from './types/loop.tsx';
 
 function App() {
+  console.log('start');
   const canvasColor = 'white';
   const isDrawing= useRef(false);
 
