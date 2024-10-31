@@ -1,10 +1,7 @@
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import { Box, Grid, Slider } from "@mui/material";
-import MuiInput from '@mui/material/Input';
-import { styled } from '@mui/material/styles';
-import React from "react";
-
-import { DEFAULT_LINE_WIDTH, MAX_LINE_WIDTH, MIN_LINE_WIDTH } from "../../../config/constants.tsx";
+import React, { useEffect, useRef, useState } from "react";
+import { ColorButton } from "../../../components/buttons/ColorButton.tsx";
+import { MAX_LINE_WIDTH, MIN_LINE_WIDTH } from "../../../config/constants.tsx";
+import Pencil from "../../../images/pencil.png";
 import { Layer } from "../../../types/layer.tsx";
 
 type Props = {
@@ -12,85 +9,101 @@ type Props = {
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   currentLayerId: number;
   redrawLayer: (layer: Layer) => void;
-}
-
-const Input = styled(MuiInput)`
-  width: 42px;
-`;
+};
 
 export const LineWidthSlider = ({layers, setLayers, currentLayerId, redrawLayer}:Props) => {
+  const targetLayer = layers.find(layer => layer.id === currentLayerId);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging || !sliderRef.current || !targetLayer) return;
+
+    const sliderRect = sliderRef.current.getBoundingClientRect();
+    // ボタンの半分の幅を考慮して調整
+    const position = Math.max(0, Math.min(e.clientX - sliderRect.left, sliderRect.width));
+    const percentage = position / sliderRect.width;
+
+    const newWidth = Math.round(MIN_LINE_WIDTH + percentage * (MAX_LINE_WIDTH - MIN_LINE_WIDTH));
+
+    const updatedLayer = { ...targetLayer, lineWidth: newWidth };
   
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    const updatedLayers = [...layers];
-    const targetLayerIndex =  updatedLayers.findIndex(layer => layer.id === currentLayerId);
-    updatedLayers[targetLayerIndex].lineWidth = newValue as number;
-    setLayers(updatedLayers);
-    redrawLayer(layers[targetLayerIndex]);
+    setLayers(prevLayers =>
+      prevLayers.map(layer =>
+        layer.id === currentLayerId
+          ? updatedLayer
+          : layer
+      )
+    );
+    redrawLayer(updatedLayer);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value === '' ? MIN_LINE_WIDTH : Number(event.target.value);
-    const updatedLayers = [...layers];
-    const targetLayerIndex =  updatedLayers.findIndex(layer => layer.id === currentLayerId);
-    updatedLayers[targetLayerIndex].lineWidth = newValue;
-    setLayers(updatedLayers);
-    redrawLayer(layers[targetLayerIndex]);
-  };
-
-  const handleBlur = () => {
-    const updatedLayers = [...layers];
-    const targetLayerIndex =  updatedLayers.findIndex(layer => layer.id === currentLayerId);
-    if (updatedLayers[targetLayerIndex].lineWidth < MIN_LINE_WIDTH) {
-      updatedLayers[targetLayerIndex].lineWidth = MIN_LINE_WIDTH;
-    } else if (updatedLayers[targetLayerIndex].lineWidth > MAX_LINE_WIDTH) {
-      updatedLayers[currentLayerId].lineWidth = MAX_LINE_WIDTH;
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
     }
-    setLayers(updatedLayers);
-    redrawLayer(layers[targetLayerIndex]);
   };
-  const targetLayer =  layers.find(layer => layer.id === currentLayerId);
+
+  useEffect(() => {
+    const handleMouseMoveEffect = (e: MouseEvent) => {
+      if (isDragging) {
+        handleMouseMove(e);
+      }
+    };
+
+    const handleMouseUpEffect = () => {
+      if (isDragging) {
+        handleMouseUp();
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMoveEffect);
+    window.addEventListener('mouseup', handleMouseUpEffect);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMoveEffect);
+      window.removeEventListener('mouseup', handleMouseUpEffect);
+    };
+  }, [isDragging]);
+
+  if (!targetLayer) return null;
+
+  const SLIDER_WIDTH = 200; 
+  const BUTTON_WIDTH = 28; 
+  const calculateButtonPosition = () => {
+    const percentage = (targetLayer.lineWidth - MIN_LINE_WIDTH) / (MAX_LINE_WIDTH - MIN_LINE_WIDTH);
+    // スライダーの実効可動域を計算
+    const effectiveSliderWidth = SLIDER_WIDTH - BUTTON_WIDTH;
+    return percentage * effectiveSliderWidth;
+  };
 
   return (
-    <Box sx={{ width: 250 }}>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item>
-          <DriveFileRenameOutlineIcon />
-        </Grid>
-        <Grid item xs>
-          {targetLayer && (
-              <Slider
-                style={{color:  targetLayer.color}}
-                defaultValue={DEFAULT_LINE_WIDTH}
-                min={MIN_LINE_WIDTH}
-                max={MAX_LINE_WIDTH}
-                step={1}
-                value={targetLayer.lineWidth}
-                onChange={handleSliderChange}
-                aria-labelledby="input-slider"
-              />
-            )
-          }
-        </Grid>
-        <Grid item>
-          {targetLayer && (
-              <Input
-                  value={targetLayer.lineWidth}
-                  size="small"
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  inputProps={{
-                    step: 1,
-                    min: MIN_LINE_WIDTH,
-                    max: MAX_LINE_WIDTH,
-                    type: 'number',
-                    'aria-labelledby': 'input-slider',
-                  }}
-              />
-            )
-          }
-          
-        </Grid>
-      </Grid>
-    </Box>
+    <div className='width-setting'>
+      <div className='width-explain'>
+        <span>ふとさ</span>
+      </div>
+      <div className='width-slider'>
+        <img src={Pencil} alt='pencil' width={28} height={28} />
+        <div className='slider' ref={sliderRef} style={{ position: 'relative' }}>
+          <div
+            style={{
+              position: 'absolute',
+              left: `${calculateButtonPosition() - 14}px`,
+              cursor: 'pointer',
+            }}
+            onMouseDown={handleMouseDown}
+          >
+            <ColorButton color={targetLayer?.color} width={28} />
+          </div>
+        </div>
+        <div className='width-value'>
+          <span>{targetLayer?.lineWidth}</span>
+        </div>
+      </div>
+    </div>
   );
 };

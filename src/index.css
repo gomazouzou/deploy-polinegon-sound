@@ -12,6 +12,14 @@ code {
     monospace;
 }
 
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
 @font-face {
   font-family: 'NicoMoji+v2';
   src: url('./fonts/nicomoji-plus_v2-5.ttf') format('truetype');
@@ -225,19 +233,20 @@ code {
   line-height: normal;
 }
 
-.widthsetting {
+.width-setting {
   display: flex;
-  width: 243px;
+  width: 280px;
   height: 126px;
-  justify-content: center;
   align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 36px;
   background: #FFF;
 }
 
-.widthexplain {
+.width-explain {
   display: flex;
   height: 16px;
+  width: 91px;
   padding: 4px 20px;
   justify-content: center;
   align-items: center;
@@ -247,10 +256,52 @@ code {
   background: #3C00EE;
 }
 
-.widthexplain span {
+.width-explain span {
   color: #FFF;
   font-family: 'NicoMoji+v2';
   font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.width-slider {
+  width: 280px;
+  height: 45px;
+  flex-shrink: 0;
+  gap: 12px;
+  display: flex;          
+  align-items: center;
+  position: relative;     
+  justify-content: center; 
+  padding: 10px;
+}
+
+.slider {
+  width: 200px;
+  height: 8px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin: 0 10px;
+}
+
+.width-value{
+  width: 48px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F0F0F0;
+}
+
+.width-value span {
+  color: #000;
+  font-family: 'NicoMoji+v2';
+  font-size: 24px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -683,36 +734,50 @@ code {
   gap: 2px; 
 }
 
-.slider-container {
-  position: relative;
-  height: 40px;
+.width-slider-dialog {
+  width: 480px;
+  height: 45px;
+  flex-shrink: 0;
+  gap: 12px;
+  top: 408px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0; 
+  right: 0;
+  position: absolute;
+  display: flex;          
+  align-items: center;
+  position: relative;     
+  justify-content: center; 
+  padding: 10px;
+}
+
+.slider-dialog {
+  width: 240px;
+  height: 8px;
+  background: #000;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin: 0 10px;
 }
 
-.slider-track {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background-color: #e0e0e0;
+.width-value-dialog{
+  width: 48px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F0F0F0;
 }
 
-.slider-handle {
-  position: absolute;
-  width: 24px;  
-  height: 24px; 
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-  transform: translateX(-50%);
-  transition: transform 0.2s;
-}
-
-.slider-handle:hover {
-  transform: translateX(-50%) scale(1.1);
-}
-
-.slider-handle:active {
-  transform: translateX(-50%) scale(0.95);
+.width-value-dialog span {
+  color: #000;
+  font-family: 'NicoMoji+v2';
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

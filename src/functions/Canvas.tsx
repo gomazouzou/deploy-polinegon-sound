@@ -1,5 +1,6 @@
 import { DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME } from "../config/constants.tsx";
 import { ChangeColorToInstrumentId } from "../hooks/useColorToInstrumentId.tsx";
+import { ChangeColorToTrueColor } from "../hooks/useColorToTrueColor.tsx";
 import { RedrawFigure, RedrawFreeFigure } from "../hooks/useDrawFigure.tsx";
 import { Layer, Type } from "../types/layer.tsx";
 import { LoopInfo } from "../types/loop.tsx";
@@ -21,14 +22,14 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
 
     context.lineWidth = layer.lineWidth;
     context.lineCap = 'round';
-    context.strokeStyle = layer.color;
+    context.strokeStyle = ChangeColorToTrueColor(layer.color);
 
     context.beginPath();
     context.moveTo(layer.drawings[0].startX, layer.drawings[0].startY);
     let drawCountBefore = layer.drawings[0].count;
 
     layer.drawings.forEach(drawing => {
-      context.strokeStyle = layer.color;
+      context.strokeStyle = ChangeColorToTrueColor(layer.color);
 
       if (drawCountBefore === drawing.count){
         context.lineTo(drawing.startX, drawing.startY);
@@ -71,7 +72,7 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
 
     context.lineWidth = layer.lineWidth;
     context.lineCap = 'round';
-    context.strokeStyle = layer.color;
+    context.strokeStyle = ChangeColorToTrueColor(layer.color);
 
     // 再描画
     layer.figures.forEach(figure => {
@@ -107,7 +108,7 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
 
     context.lineWidth = layer.lineWidth;
     context.lineCap = 'round';
-    context.strokeStyle = layer.color;
+    context.strokeStyle = ChangeColorToTrueColor(layer.color);
 
     // 再描画
     layer.figures.forEach(figure => {

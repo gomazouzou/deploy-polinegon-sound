@@ -8,6 +8,7 @@ import { RedrawLayer } from "../../functions/Canvas.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo, Position } from "../../types/loop.tsx";
 import { ChangeColorPalette } from "./ChangeColorPalette/index.tsx";
+import { LineWidthSlider } from "./LineWidthSlider/index.tsx";
 import { QuantizeSelector } from "./QuantizeSelector/index.tsx";
 
 
@@ -39,21 +40,23 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
   return(
     <div className='drawpannel'>
       <QuantizeSelector quantizeRef={quantizeRef} />
-      <div className='widthsetting'>
-        <div className='intervalexplain'>
-          <span>ふとさ</span>
-        </div>
-      </div>
-
+      
+      <LineWidthSlider
+        layers={layers}
+        setLayers={setLayers}
+        currentLayerId={currentLayerId}
+        redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
+      />
+      
       <div className='colorsetting'>
         <div className='colorexplain'>
           <span>色</span>
         </div>
         <ChangeColorPalette 
-                layers={layers}
-                setLayers={setLayers}
-                currentLayerId={currentLayerId}
-                redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
+          layers={layers}
+          setLayers={setLayers}
+          currentLayerId={currentLayerId}
+          redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
         />
       </div>
       

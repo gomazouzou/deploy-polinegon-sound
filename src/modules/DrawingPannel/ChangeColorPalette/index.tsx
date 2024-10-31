@@ -16,7 +16,6 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
       const newLayers = [...prevLayers];
       const targetLayerIndex =  newLayers.findIndex(layer => layer.id === currentLayerId);
       newLayers[targetLayerIndex] = { ...newLayers[targetLayerIndex], color:color };
-      console.log(newLayers[targetLayerIndex]);
       redrawLayer(newLayers[targetLayerIndex]);
       return newLayers;
     });

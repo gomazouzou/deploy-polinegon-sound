@@ -7,6 +7,7 @@ import { PoligoneButton } from '../../../components/buttons/PoligoneButton.tsx';
 import { DEFAULT_LINE_WIDTH } from '../../../config/constants.tsx';
 import { Type } from '../../../types/layer.tsx';
 import { ColorSelector } from './ColorSelector/index.tsx';
+import { LineWidthSelector } from './LineWidthSelector/index.tsx';
 
 type Props = {
   open: boolean;
@@ -96,6 +97,9 @@ export const AddLayerDialog = ({open, onClose, addLayer}: Props) =>  {
         <div className="width-decide-frame">
           <span>太さを選択</span>
         </div>
+
+        <LineWidthSelector color={color} setLineWidth={setLineWidth} lineWidth={lineWidth}/>
+
         <div className="decide-frame" onClick={() => {addLayer(color, lineWidth, type); onClose();}}>
           <span>決定</span>
         </div>

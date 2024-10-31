@@ -1,3 +1,4 @@
+import { context } from "tone";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, MARGIN, PROCESS_SPAN, SIZE, SPEED, SPEED_2 } from "../config/constants.tsx";
 import { Direction } from "../types/direction.tsx";
 import { Layer } from "../types/layer.tsx";
@@ -66,7 +67,7 @@ export const drawFigure02 = (context: CanvasRenderingContext2D | null, layer: La
         : (y < halfSize + MARGIN) ? halfSize + MARGIN 
         : y;
 
-  context.strokeStyle = layer.color;
+  context.strokeStyle = ChangeColorToTrueColor(layer.color);
   context.lineWidth = layer.lineWidth;
   context.beginPath();
   context.moveTo(centerX - halfSize, centerY - halfSize);

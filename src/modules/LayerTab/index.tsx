@@ -63,7 +63,6 @@ export const LayerTab = ({setClickFigureDrawing, layers, setLayers, currentLayer
     }
   
     const newLayers = layers.filter(layer => layer.id !== layerId);
-    console.log('newLayers:', newLayers);
     setLayers(newLayers);
     
     const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);  
