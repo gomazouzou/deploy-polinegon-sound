@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 
+import { Stack, Typography } from "@mui/material";
 import * as Tone from 'tone';
 import { MinusButton } from "../../components/buttons/MinusButton.tsx";
 import { PlusButton } from "../../components/buttons/PlusButton.tsx";
+import { StartButton } from "../../components/buttons/StartButton.tsx";
+import { StopButton } from "../../components/buttons/StopButton.tsx";
 import { PROCESS_SPAN } from "../../config/constants.tsx";
 import { ChangeFreePlayerToLoop, ChangeInstrumentIdToPlayer, ChangePlayerToLoop, ChangeSamplerToLoop } from "../../hooks/useInstrumentIdToPlayer.tsx";
 import { LoopInfo, Type } from "../../types/loop.tsx";
@@ -122,16 +125,21 @@ export const Player = ({loops, UpdateBeatCount, beatCountRef, metronomeAudioBuff
   };
   
   return (
-    <div className = "playerlayer">
-        <div className = "bpmexplain">
-          <span>はやさ</span>
-          <div className = "bpmframe">
-            <MinusButton onLongPress={onLongPressMinusButton} disabled={clickFigureDrawing}/>
-            <span>{bpm} bpm</span>
-            <PlusButton onLongPress={onLongPressPlusButton} disabled={clickFigureDrawing}/>
-          </div>
-        </div>
+    <Stack  spacing={1}>
+      <Stack direction="row" alignItems="center" justifyContent="center">
+        <StartButton onClick={startMusic} disabled={clickFigureDrawing}/>
+
+        <StopButton onClick={stopMusic} disabled={clickFigureDrawing}/>
+
+        <MinusButton onLongPress={onLongPressMinusButton} disabled={clickFigureDrawing}/>
+
+        <Typography>BPM : {bpm}</Typography>
+
+        <PlusButton onLongPress={onLongPressPlusButton} disabled={clickFigureDrawing}/>
+      </Stack>
+      <Stack>
         <BeatDisplay beat={beat}/>
-      </div>
+      </Stack>
+    </Stack>
   );
 };

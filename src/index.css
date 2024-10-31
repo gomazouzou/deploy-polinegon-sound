@@ -40,6 +40,68 @@ code {
   background: var(--white, #FFF);
 }
 
+.playerlayer {
+  position: absolute; 
+  width: 939px;
+  height: 98px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 28px;
+  top: 23px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-shrink: 0;
+}
+
+.bpmexplain {
+  display: flex;
+  width: 250px;
+  height: 52px;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.bpmexplain span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.bpmframe {
+  display: flex;
+  width: 250px;
+  height: 24px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.bpmframe span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.metronomeframe{
+  width: 939px;
+  height: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  color: #FFF;
+}
+
 .drawpannel {
   position: absolute; 
   display: flex;
@@ -76,6 +138,7 @@ code {
   background: var(--blue, #3C00EE);
   justify-content: space-between;
 }
+
 .layerheader span {
   color: #FFF;
   font-family: 'NicoMoji+v2';

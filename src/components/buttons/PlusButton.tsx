@@ -1,6 +1,6 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { IconButton } from "@mui/material";
 import React, { useRef } from "react";
+import plusButton from '../../images/plus_button.png';
 
 type Props = {
   onLongPress: () => void;
@@ -28,7 +28,7 @@ export const PlusButton = ({onLongPress, disabled}: Props) => {
       onMouseLeave={handleMouseUp}
       disabled={disabled}
     >
-      <ArrowForwardIosIcon />
+      <img src={plusButton} alt="plus" width={12} height={24} />
     </IconButton>
   );
 };

@@ -1,6 +1,6 @@
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { IconButton } from "@mui/material";
 import React, { useRef } from "react";
+import minusButton from '../../images/minus_button.png';
 
 type Props = {
   onLongPress: () => void;
@@ -29,7 +29,7 @@ export const MinusButton = ({onLongPress, disabled}: Props) => {
       onMouseLeave={handleMouseUp}
       disabled={disabled}
     >
-      <ArrowBackIosNewIcon />
+      <img src={minusButton} alt="minus" width={12} height={24} />
     </IconButton>
   );
 };

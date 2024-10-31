@@ -7,6 +7,7 @@ import { noteMapping } from './hooks/useInstrumentIdToPlayer.tsx';
 import { ChangeMousePosToNoteId } from './hooks/useMousePosToNoteId.tsx';
 import { DrawingPannel } from './modules/DrawingPannel/index.tsx';
 import { LayerTab } from './modules/LayerTab/index.tsx';
+import { Player } from './modules/Player/index.tsx';
 import { Direction } from './types/direction.tsx';
 import { Layer, Type } from "./types/layer.tsx";
 import { LoopInfo, Position } from './types/loop.tsx';
@@ -565,6 +566,19 @@ function App() {
   return (
     <div className="container">
       <div className ="canvas"></div> 
+      <Player 
+          loops={loops}
+          UpdateBeatCount={UpdateBeatCount}
+          beatCountRef={beatCountRef}
+          metronomeAudioBuffer={metronomeAudioBuffer}
+          figureAudioBuffers={figureAudioBuffers}
+          lineAudioSamplers={lineAudioSamplers}
+          setIsPlaying={setIsPlaying}
+          setClickFigureDrawing={setClickFigureDrawing}
+          clickFigureDrawing={clickFigureDrawing}
+        />
+      
+
       <DrawingPannel
           setCurrentFigure={setCurrentFigure}
           currentFigure={currentFigure}
