@@ -4,8 +4,10 @@ import { Figure00Button } from "../../components/buttons/Figure00Button.tsx";
 import { Figure01Button } from "../../components/buttons/Figure01Button.tsx";
 import { Figure02Button } from "../../components/buttons/Figure02Button.tsx";
 import { Figure03Button } from "../../components/buttons/Figure03Button.tsx";
+import { RedrawLayer } from "../../functions/Canvas.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo, Position } from "../../types/loop.tsx";
+import { ChangeColorPalette } from "./ChangeColorPalette/index.tsx";
 
 
 type Props = {
@@ -26,10 +28,10 @@ type Props = {
 export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLayers, currentLayerId, canvasColor, setLoops, quantizeRef, clickFigureDrawing, setClickFigureDrawing, isPlaying, positionRef}: Props) => { 
   const buttonStyle = (num: number) => ({
     borderRadius: 0,
-    backgroundColor: isSelected(num) ?  'rgba(173, 216, 230, 0.2)' : "transparent",
+    backgroundColor: isSelected(num) ? 'rgba(100, 181, 246, 0.4)' : "transparent", // より濃い青色に変更
     width: "80px",
     height: "80px",
-  });
+});
 
   const isSelected = (num: number) => currentFigure === num;
 
@@ -47,11 +49,19 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
           <span>ふとさ</span>
         </div>
       </div>
+
       <div className='colorsetting'>
         <div className='colorexplain'>
           <span>色</span>
         </div>
+        <ChangeColorPalette 
+                layers={layers}
+                setLayers={setLayers}
+                currentLayerId={currentLayerId}
+                redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
+        />
       </div>
+      
       <div className='rhythmsetting'>
         <div className='rhythmexplain'>
           <span>図形</span>
