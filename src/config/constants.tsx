@@ -9,8 +9,8 @@ export const MAX_VOLUME = 6;
 
 export const SIZE = 120; //図形のサイズ
 
-export const CANVAS_HEIGHT = 480; //キャンバスの高さ
-export const CANVAS_WIDTH = 960; //キャンバスの幅
+export const CANVAS_HEIGHT = 488; //キャンバスの高さ
+export const CANVAS_WIDTH = 742; //キャンバスの幅
 export const MARGIN = 20; //図形の描画範囲のマージン
 
 //何音符音符間隔で処理するか

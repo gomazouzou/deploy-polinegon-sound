@@ -7,6 +7,7 @@ import { useDisclosure } from "../../hooks/useDiscloser.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo } from "../../types/loop.tsx";
 import { AddLayerDialog } from "./AddLayerDialog/index.tsx";
+import { LayerCard } from "./LayerCard/index.tsx";
 
 type Props = {
   canvasColor: string;
@@ -101,6 +102,17 @@ export const LayerTab = ({canvasColor, layers, setLayers, currentLayerId, setCur
             楽器
         </span>
         <AddButton onClick={openAddLayerDialog} disabled={clickFigureDrawing}/>
+      </div>
+      <div className='layerregion'>
+      {layers.map((layer, index) => (
+            <LayerCard
+              layer={layer}
+              id={index}
+              setCurrentLayerId={setCurrentLayerId}
+              isHilighted={currentIndex === index} 
+              disabled={clickFigureDrawing}
+            />
+          ))}
       </div>
 
     <AddLayerDialog

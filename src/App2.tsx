@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
-import { DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
+import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
 import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
 import { ChangeFigureToAnimation, DrawAnimation, drawFigure00, drawFigure01, drawFigure02, drawFigure03, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
 import { noteMapping } from './hooks/useInstrumentIdToPlayer.tsx';
@@ -565,7 +565,26 @@ function App() {
 
   return (
     <div className="container">
-      <div className ="canvas"></div> 
+      <div className ="canvas">
+      {
+          layers.map((layer, index) => (
+              <canvas
+                key={layer.id}
+                ref={layer.ref}
+                width={CANVAS_WIDTH}
+                height={CANVAS_HEIGHT}
+                style={{
+                  border: '1px solid black',
+                  backgroundColor: "transparent",
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                }}
+              />
+          )) 
+        }
+      </div> 
+      
       <Player 
           loops={loops}
           UpdateBeatCount={UpdateBeatCount}

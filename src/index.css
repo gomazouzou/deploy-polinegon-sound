@@ -139,6 +139,15 @@ code {
   justify-content: space-between;
 }
 
+.layerregion {
+  width: 376px;
+  height: 406px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 6px 6px 6px;
+  overflow-y: auto;
+}
+
 .layerheader span {
   color: #FFF;
   font-family: 'NicoMoji+v2';
