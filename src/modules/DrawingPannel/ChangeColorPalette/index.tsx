@@ -38,7 +38,7 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
       </div>
       <div className="colorframe2">
         <ColorButton color="green" setPenColor={changeLayerColor} style={buttonStyle("green")} width={30}/>
-        <ColorButton color="pink" setPenColor={changeLayerColor} style={buttonStyle("pink")} width={30}/>
+        <ColorButton color="lightblue" setPenColor={changeLayerColor} style={buttonStyle("lightblue")} width={30}/>
         <ColorButton color="orange" setPenColor={changeLayerColor} style={buttonStyle("orange")} width={30}/>
         <ColorButton color="black" setPenColor={changeLayerColor} style={buttonStyle("black")} width={30}/>
       </div>

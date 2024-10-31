@@ -1,10 +1,12 @@
-import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
-import MultilineChartIcon from '@mui/icons-material/MultilineChart';
-import PolylineIcon from '@mui/icons-material/Polyline';
-import { Card, Stack, Typography } from "@mui/material";
 import React from "react";
 
+import { ColorButton } from '../../../components/buttons/ColorButton.tsx';
+import { DeleteButton } from "../../../components/buttons/DeleteButton.tsx";
+import { FreeDrawingButton } from "../../../components/buttons/FreeDrawingButton.tsx";
+import { LineButton } from "../../../components/buttons/LineButton.tsx";
+import { PoligoneButton } from "../../../components/buttons/PoligoneButton.tsx";
 import { Layer, Type } from "../../../types/layer.tsx";
+import { LoopInfo } from "../../../types/loop.tsx";
 
 
 type Props = {
@@ -13,32 +15,39 @@ type Props = {
   setCurrentLayerId: React.Dispatch<React.SetStateAction<number>>;
   isHilighted: boolean;
   disabled: boolean;
+  setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
+  clickFigureDrawing: boolean;
+  deleteLayer: (layerId: number, setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>) => void;
 }
 
-export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled}: Props) => {
+export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled, setLoops, clickFigureDrawing, deleteLayer}: Props) => {
+  const getTypeButton = (type: Type) => {
+    switch (type) {
+      case Type.Line:
+        return <LineButton width={36}/>;
+      case Type.Poligone:
+        return <PoligoneButton width={36}/>;
+      case Type.Free:
+        return <FreeDrawingButton width={36}/>;
+    }
+  }
   return (
-    <Card 
-      onClick = {() => {
-        if (disabled) return;
-        setCurrentLayerId(layer.id); 
-      }}
-      sx={{  border: isHilighted ? '3px solid ' + layer.color : '1.5px solid ' + layer.color }} 
-    >
-      <Stack direction="row" alignItems={"center"} justifyContent="space-between" p={2}>
-        <Typography fontSize={18}>{id+1}. {layer.color}</Typography>
-        <Stack direction="row" alignItems={"center"}>
-        <Typography fontSize={18} marginRight={2}> width: {layer.lineWidth} </Typography>
-          {
-            layer.type === Type.Line ? (
-              <MultilineChartIcon  style={{ fontSize: '24px', color: layer.color}}/>
-            ): layer.type === Type.Poligone ? (
-              <ChangeHistoryIcon style={{ fontSize: '24px', color: layer.color}}/>
-            ): layer.type === Type.Free ? (
-              <PolylineIcon style={{ fontSize: '24px', color: layer.color}}/>
-            ): null
-          }
-        </Stack>
-      </Stack>
-    </Card>
+      <div 
+        className='layercard' 
+        onClick = {() => {
+          if (disabled) return;
+          setCurrentLayerId(layer.id);
+        }}
+        style={{ border: isHilighted ? '3px solid black' : '3px solid transparent' }}
+      >
+        <div className="layercolorframe">
+          <ColorButton color={layer.color} width={30}/>
+          <span>{layer.color}</span>
+        </div>
+        <div className="layericon">
+          {getTypeButton(layer.type)}
+          <DeleteButton onClick={() => deleteLayer(layer.id, setLoops)} disabled={clickFigureDrawing}/>
+        </div>
+      </div>
   )
 }

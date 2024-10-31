@@ -12,7 +12,7 @@ export const ChangeColorToInstrumentId = (color: string) => {
       return 4;
     case "orange":
       return 5;
-    case "pink":
+    case "lightblue":
       return 6;
     case "purple":
       return 7;

@@ -23,14 +23,14 @@ export const ColorSelector = ({setPenColor, color}: Props) => {
   return (
     <Stack alignItems="center" justifyContent="center" style={{ height: '100%' }}>
       <Stack direction="row">
-        <ColorButton color="black" setPenColor={setPenColor} style={buttonStyle("black")}/>
-        <ColorButton color="red" setPenColor={setPenColor} style={buttonStyle("red")}/>
-        <ColorButton color="blue" setPenColor={setPenColor} style={buttonStyle("blue")}/>
-        <ColorButton color="yellow" setPenColor={setPenColor} style={buttonStyle("yellow")}/>
-        <ColorButton color="green" setPenColor={setPenColor} style={buttonStyle("green")}/>
-        <ColorButton color="orange" setPenColor={setPenColor} style={buttonStyle("orange")}/>
-        <ColorButton color="pink" setPenColor={setPenColor} style={buttonStyle("pink")}/>
-        <ColorButton color="purple" setPenColor={setPenColor} style={buttonStyle("purple")}/>
+        <ColorButton color="black" setPenColor={setPenColor} style={buttonStyle("black")} width={42}/>
+        <ColorButton color="red" setPenColor={setPenColor} style={buttonStyle("red")} width={42}/>
+        <ColorButton color="blue" setPenColor={setPenColor} style={buttonStyle("blue")} width={42}/>
+        <ColorButton color="yellow" setPenColor={setPenColor} style={buttonStyle("yellow")} width={42}/>
+        <ColorButton color="green" setPenColor={setPenColor} style={buttonStyle("green")} width={42}/>
+        <ColorButton color="orange" setPenColor={setPenColor} style={buttonStyle("orange")} width={42}/>
+        <ColorButton color="lightblue" setPenColor={setPenColor} style={buttonStyle("lightblue")} width={42}/>
+        <ColorButton color="purple" setPenColor={setPenColor} style={buttonStyle("purple")} width={42}/>
       </Stack>
     </Stack>
   );

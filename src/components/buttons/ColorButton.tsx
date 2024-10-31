@@ -3,8 +3,8 @@ import React from "react";
 import BlackButton from '../../images/black_button.png';
 import BlueButton from '../../images/blue_button.png';
 import GreenButton from '../../images/green_button.png';
+import LightBlueButton from '../../images/lightblue_button.png';
 import OrangeButton from '../../images/orange_button.png';
-import PinkButton from '../../images/pink_button.png';
 import PurpleButton from '../../images/purple_button.png';
 import RedButton from '../../images/red_button.png';
 import YellowButton from '../../images/yellow_button.png';
@@ -12,13 +12,14 @@ import YellowButton from '../../images/yellow_button.png';
 
 type Props = {
   color: string;
-  setPenColor: (color:string) => void;
-  style: React.CSSProperties;
+  setPenColor?: (color:string) => void;
+  style?: React.CSSProperties;
   width: number;
 }
 
 export const ColorButton = ({color, setPenColor, style, width}: Props) => {
   const onClick = () => {
+    if (!setPenColor) return;
     setPenColor(color);
   }
   const getButtonImage = (color: string) => {
@@ -37,8 +38,8 @@ export const ColorButton = ({color, setPenColor, style, width}: Props) => {
         return PurpleButton;
       case 'orange':
         return OrangeButton;
-      case 'pink':
-        return PinkButton;
+      case 'lightblue':
+        return LightBlueButton;
     }
   };
   return (

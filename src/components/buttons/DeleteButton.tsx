@@ -1,6 +1,6 @@
-import RemoveIcon from '@mui/icons-material/Remove';
 import { IconButton } from "@mui/material";
 import React from "react";
+import deleteButton from '../../images/delete_button.png';
 
 type Props = {
   onClick: () => void;
@@ -14,7 +14,7 @@ export const DeleteButton = ({onClick, disabled}: Props) => {
       onClick={onClick}
       disabled={disabled}
     >
-      <RemoveIcon />
+      <img src={deleteButton} alt="delete" width={30} height={30} />
     </IconButton>
   );
 };

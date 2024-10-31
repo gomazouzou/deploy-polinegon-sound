@@ -142,10 +142,47 @@ code {
 .layerregion {
   width: 376px;
   height: 406px;
+  display: flex;     
   flex-direction: column;
   gap: 6px;
   padding: 6px 6px 6px 6px;
   overflow-y: auto;
+}
+
+.layercard {
+  width: 322px;
+  height: 24.3px;
+  padding: 24px;
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+  background: #E1F961;
+}
+
+.layericon {
+  display: flex;
+  width: 141.584px;
+  height: 40px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+  background-color: #E1F961;
+}
+
+.layercolorframe{
+  display: flex; 
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.layercolorframe span {
+  color: #000;
+  font-family: 'NicoMoji+v2';
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .layerheader span {

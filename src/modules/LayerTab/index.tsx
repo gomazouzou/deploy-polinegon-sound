@@ -1,5 +1,3 @@
-import { createTheme } from "@mui/material";
-import { makeStyles } from '@mui/styles';
 import React from "react";
 import { AddButton } from "../../components/buttons/AddButton.tsx";
 import { useDisclosure } from "../../hooks/useDiscloser.tsx";
@@ -20,23 +18,6 @@ type Props = {
   setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
   clickFigureDrawing: boolean;
 }
-const useStyles = makeStyles({
-  customText: {
-    color: '#FFF',
-    fontFamily: 'NicoMoji+v2',
-    fontSize: '28px',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    lineHeight: 'normal',
-  },
-});
-
-const theme = createTheme({
-  typography: {
-    fontFamily: 'NicoMoji+v2',
-  },
-});
-
 
 export const LayerTab = ({canvasColor, layers, setLayers, currentLayerId, setCurrentLayerId, totalLayer, setTotalLayer, setLoops, clickFigureDrawing}: Props) => {
 
@@ -71,21 +52,23 @@ export const LayerTab = ({canvasColor, layers, setLayers, currentLayerId, setCur
     if (layers.length < 2){
       return;
     }
-    
-    const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);
+  
     const newLayers = layers.filter(layer => layer.id !== layerId);
+    console.log('newLayers:', newLayers);
     setLayers(newLayers);
     
-    const newCurrentIndex = currentIndex - 1 > 0 ? newLayers[currentIndex - 1].id : newLayers[0].id
-    setCurrentLayerId(newCurrentIndex);
+    const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);  
+    if (currentLayerId === layerId){
+      const newCurrentIndex = currentIndex - 1 > 0 ? newLayers[currentIndex - 1].id : newLayers[0].id
+      setCurrentLayerId(newCurrentIndex);
+    }
+    
 
     //ループ情報の更新
     setLoops(prevLoops => prevLoops.filter(loop => loop.layer_id !== layerId));
   };
   
   const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);
-
-  const classes = useStyles();
 
   return(
     <>
@@ -111,6 +94,9 @@ export const LayerTab = ({canvasColor, layers, setLayers, currentLayerId, setCur
               setCurrentLayerId={setCurrentLayerId}
               isHilighted={currentIndex === index} 
               disabled={clickFigureDrawing}
+              clickFigureDrawing={clickFigureDrawing}
+              deleteLayer={deleteLayer}
+              setLoops={setLoops}
             />
           ))}
       </div>
