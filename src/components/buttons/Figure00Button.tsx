@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React from "react";
 import Figure00 from '../../images/figure_templete_00.png';
 
@@ -10,11 +10,13 @@ type Props = {
 
 export const Figure00Button = ({onClick, style, disabled}: Props) => {
   return (
-    <Button
-      startIcon={<img src={Figure00} alt="myImage" style={{ width: 80, height: 80 }} />} 
+    <IconButton
+      aria-label="add"
       onClick={onClick}
-      style={style}
       disabled={disabled}
-    />
+      style={{ width: 67, height: 67, ...style }}
+    >
+      <img src={Figure00} alt="add" width={67} height={67} />
+    </IconButton>
   );
 };

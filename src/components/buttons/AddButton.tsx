@@ -1,6 +1,6 @@
-import AddIcon from '@mui/icons-material/Add';
 import { IconButton } from "@mui/material";
 import React from "react";
+import plusButton from '../../images/plus_button.png';
 
 type Props = {
   onClick: () => void;
@@ -13,8 +13,9 @@ export const AddButton = ({onClick, disabled}: Props) => {
       aria-label="add"
       onClick={onClick}
       disabled={disabled}
+      style={{ width: 26, height: 26 }}
     >
-      <AddIcon />
+      <img src={plusButton} alt="add" width={26} height={26} />
     </IconButton>
   );
 };

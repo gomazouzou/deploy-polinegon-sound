@@ -11,6 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'NicoMoji+v2';
+  src: url('./fonts/nicomoji-plus_v2-5.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .container {
   display: flex;
   width: 1150px;
@@ -65,4 +73,149 @@ code {
   align-items: center;
   border-radius: 12px 12px 0px 0px;
   background: var(--blue, #3C00EE);
+  justify-content: space-between;
+}
+.layerheader span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.intervalsetting{
+  display: flex;
+  width: 131px;
+  height: 126px;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: #FFF;
+}
+
+.intervalexplain {
+  display: flex;
+  height: 16px;
+  width: 91px;
+  padding: 4px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 12px;
+  background: #3C00EE;
+}
+
+.intervalexplain span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.widthsetting {
+  display: flex;
+  width: 243px;
+  height: 126px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  background: #FFF;
+}
+
+.widthexplain {
+  display: flex;
+  height: 16px;
+  padding: 4px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #3C00EE;
+}
+
+.widthexplain span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.colorsetting {
+  display: flex;
+  width: 153px;
+  height: 126px;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: #FFF;
+}
+
+.colorexplain {
+  display: flex;
+  height: 16px;
+  padding: 4px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #3C00EE;
+}
+
+.colorexplain span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.rhythmsetting {
+  display: flex;
+  width: 405px;
+  height: 126px;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  background: #FFF;
+}
+
+.rhythmexplain {
+  display: flex;
+  height: 16px;
+  padding: 4px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #3C00EE;
+}
+
+.rhythmexplain span {
+  color: #FFF;
+  font-family: 'NicoMoji+v2';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.figureframe {
+  width: 405px;
+  height: 75px;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  background: #FFF;
 }

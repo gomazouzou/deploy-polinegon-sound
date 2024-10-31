@@ -1,6 +1,6 @@
-import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { IconButton } from "@mui/material";
 import React from "react";
+import startButton from '../../images/start_button.png';
 
 type Props = {
   onClick: () => void;
@@ -13,8 +13,9 @@ export const StartButton = ({onClick, disabled}: Props) => {
       aria-label="start"
       onClick={onClick}
       disabled={disabled}
+      style={{ width: 58, height: 58 }}
     >
-      <PlayCircleFilledWhiteIcon />
+      <img src={startButton} alt="add" width={58} height={58} />
     </IconButton>
   );
 };

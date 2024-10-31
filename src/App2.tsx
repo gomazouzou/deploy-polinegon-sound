@@ -5,6 +5,8 @@ import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
 import { ChangeFigureToAnimation, DrawAnimation, drawFigure00, drawFigure01, drawFigure02, drawFigure03, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
 import { noteMapping } from './hooks/useInstrumentIdToPlayer.tsx';
 import { ChangeMousePosToNoteId } from './hooks/useMousePosToNoteId.tsx';
+import { DrawingPannel } from './modules/DrawingPannel/index.tsx';
+import { LayerTab } from './modules/LayerTab/index.tsx';
 import { Direction } from './types/direction.tsx';
 import { Layer, Type } from "./types/layer.tsx";
 import { LoopInfo, Position } from './types/loop.tsx';
@@ -563,11 +565,31 @@ function App() {
   return (
     <div className="container">
       <div className ="canvas"></div> 
-      <div className='drawpannel'></div>
-      <div className='layerpannel'>
-        <div className='layerheader'>
-        </div>
-      </div>
+      <DrawingPannel
+          setCurrentFigure={setCurrentFigure}
+          currentFigure={currentFigure}
+          layers={layers}
+          setLayers={setLayers}
+          currentLayerId={currentLayerId}
+          canvasColor={canvasColor}
+          setLoops={setLoops}
+          quantizeRef={quantizeRef}
+          clickFigureDrawing={clickFigureDrawing}
+          setClickFigureDrawing={setClickFigureDrawing}
+          isPlaying={isPlaying}
+          positionRef={positionRef}
+        />
+      <LayerTab
+          canvasColor={canvasColor}
+          layers={layers}
+          setLayers={setLayers}
+          currentLayerId={currentLayerId}
+          setCurrentLayerId={setCurrentLayerId}
+          totalLayer={totalLayer}
+          setTotalLayer={setTotalLayer}
+          setLoops={setLoops}
+          clickFigureDrawing={clickFigureDrawing}
+        />
       {/* 他のコンテンツがここに入ります */}
     </div>
   );

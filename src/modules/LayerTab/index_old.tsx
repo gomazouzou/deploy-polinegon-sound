@@ -1,12 +1,12 @@
-import { createTheme } from "@mui/material";
-import { makeStyles } from '@mui/styles';
+import { Stack } from "@mui/material";
 import React from "react";
 import { AddButton } from "../../components/buttons/AddButton.tsx";
+import { DeleteButton } from "../../components/buttons/DeleteButton.tsx";
 import { useDisclosure } from "../../hooks/useDiscloser.tsx";
-
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo } from "../../types/loop.tsx";
 import { AddLayerDialog } from "./AddLayerDialog/index.tsx";
+import { LayerCard } from "./LayerCard/index.tsx";
 
 type Props = {
   canvasColor: string;
@@ -19,23 +19,6 @@ type Props = {
   setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
   clickFigureDrawing: boolean;
 }
-const useStyles = makeStyles({
-  customText: {
-    color: '#FFF',
-    fontFamily: 'NicoMoji+v2',
-    fontSize: '28px',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    lineHeight: 'normal',
-  },
-});
-
-const theme = createTheme({
-  typography: {
-    fontFamily: 'NicoMoji+v2',
-  },
-});
-
 
 export const LayerTab = ({canvasColor, layers, setLayers, currentLayerId, setCurrentLayerId, totalLayer, setTotalLayer, setLoops, clickFigureDrawing}: Props) => {
 
@@ -84,31 +67,60 @@ export const LayerTab = ({canvasColor, layers, setLayers, currentLayerId, setCur
   
   const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);
 
-  const classes = useStyles();
-
   return(
-    <>
-    <div className='layerpannel'>
-      <div className='layerheader'>
-        <span style={{
-              color: '#FFF',
-              fontFamily: 'NicoMoji+v2',
-              fontSize: '28px',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: 'normal'
-        }}>
-            楽器
-        </span>
+    <div
+      style={{
+        width: '400px',
+        height: '480px',
+        border: '1px solid black',
+        backgroundColor: canvasColor,
+        position: 'absolute',
+        top: 0,
+        left: 0
+      }}
+    >
+      <div
+      style={{
+        width: '400px',
+        height: '40px',
+        border: '1px solid black',
+        backgroundColor: canvasColor,
+        position: 'absolute',
+        top: 0,
+        left: 0
+      }}
+      >
         <AddButton onClick={openAddLayerDialog} disabled={clickFigureDrawing}/>
+        <DeleteButton onClick={() => deleteLayer(currentLayerId, setLoops)} disabled={clickFigureDrawing}/>
       </div>
-
-    <AddLayerDialog
-      open={isCOpenAddLayerDialog}
-      onClose={closeAddLayerDialog}
-      addLayer={addLayer}
-    />
+      <div
+        style={{
+          width: '400px',
+          height: '400px',
+          backgroundColor: canvasColor,
+          position: 'absolute',
+          top: 45,
+          left: 0,
+          overflowY: 'scroll'
+        }}
+      >
+        <Stack p={1} spacing={1}>
+          {layers.map((layer, index) => (
+            <LayerCard
+              layer={layer}
+              id={index}
+              setCurrentLayerId={setCurrentLayerId}
+              isHilighted={currentIndex === index} 
+              disabled={clickFigureDrawing}
+            />
+          ))}
+        </Stack>
+      </div>
+      <AddLayerDialog
+        open={isCOpenAddLayerDialog}
+        onClose={closeAddLayerDialog}
+        addLayer={addLayer}
+      />
     </div>
-    </>
   );
 };
