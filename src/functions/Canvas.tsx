@@ -49,6 +49,7 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
       if (loop.layer_id === layer.id) {
         return {
           ...loop,
+          color: layer.color,
           instrument: ChangeColorToInstrumentId(layer.color),
           volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
         };
@@ -82,6 +83,7 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
       if (loop.layer_id === layer.id) {
         return {
           ...loop,
+          color: layer.color,
           instrument: ChangeColorToInstrumentId(layer.color),
           volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
         };
@@ -92,6 +94,8 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
 
   //自由図形描画図形の場合の再描画
   if (layer.type === Type.Free) {
+    console.log('layer.figures:', layer.figures);
+    console.log("layer_id:", layer.id);
     if (layer.figures.length === 0) return;
     const canvas = layer.ref.current;
     if (!canvas) return;
@@ -111,10 +115,12 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
     });
 
     // ループ情報の再設定
+    console.log('color:', layer.color);
     setLoops(prevLoops => prevLoops.map(loop => {
       if (loop.layer_id === layer.id) {
         return {
           ...loop,
+          color: layer.color,
           instrument: ChangeColorToInstrumentId(layer.color),
           volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
         };

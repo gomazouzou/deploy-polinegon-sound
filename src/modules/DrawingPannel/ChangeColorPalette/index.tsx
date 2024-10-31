@@ -16,15 +16,12 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
       const newLayers = [...prevLayers];
       const targetLayerIndex =  newLayers.findIndex(layer => layer.id === currentLayerId);
       newLayers[targetLayerIndex] = { ...newLayers[targetLayerIndex], color:color };
+      console.log(newLayers[targetLayerIndex]);
       redrawLayer(newLayers[targetLayerIndex]);
       return newLayers;
     });
   };
 
-  const buttonStyle = (color: string) => ({
-    borderRadius: "200%",
-    backgroundColor: isSelected(color) ?  "#E0E0E0" : "transparent",
-  });
   const targetLayer = layers.find(layer => layer.id === currentLayerId);
   const isSelected = (color: string) => targetLayer?.color === color;
 

@@ -16,6 +16,8 @@ export const ChangeColorToTrueColor = (color: string) => {
       return "#4FC7FF";
     case "purple":
       return "#DD6EFF";
+    default:
+      return "#242329";
   }
 };
 

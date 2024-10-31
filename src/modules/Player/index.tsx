@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import * as Tone from 'tone';
 import { MinusButton } from "../../components/buttons/MinusButton.tsx";
 import { PlusButton } from "../../components/buttons/PlusButton.tsx";
+import { StartButton } from "../../components/buttons/StartButton.tsx";
+import { StopButton } from "../../components/buttons/StopButton.tsx";
 import { PROCESS_SPAN } from "../../config/constants.tsx";
 import { ChangeFreePlayerToLoop, ChangeInstrumentIdToPlayer, ChangePlayerToLoop, ChangeSamplerToLoop } from "../../hooks/useInstrumentIdToPlayer.tsx";
 import { LoopInfo, Type } from "../../types/loop.tsx";
 import { BeatDisplay } from "./BeatDisplay/index.tsx";
 
 type Props = {
+  isPlaying: boolean;
   loops: LoopInfo[];
   UpdateBeatCount: () => void;
   beatCountRef: React.MutableRefObject<number>;
@@ -20,7 +23,7 @@ type Props = {
   clickFigureDrawing: boolean;
 }
 
-export const Player = ({loops, UpdateBeatCount, beatCountRef, metronomeAudioBuffer, figureAudioBuffers, lineAudioSamplers, setIsPlaying, setClickFigureDrawing, clickFigureDrawing}: Props) => {
+export const Player = ({isPlaying, loops, UpdateBeatCount, beatCountRef, metronomeAudioBuffer, figureAudioBuffers, lineAudioSamplers, setIsPlaying, setClickFigureDrawing, clickFigureDrawing}: Props) => {
   const [bpm, setBpm] = useState(120);
   const [beat, setBeat] = useState(7);
 
@@ -122,6 +125,7 @@ export const Player = ({loops, UpdateBeatCount, beatCountRef, metronomeAudioBuff
   };
   
   return (
+    <>
     <div className = "playerlayer">
         <div className = "bpmexplain">
           <span>はやさ</span>
@@ -132,6 +136,14 @@ export const Player = ({loops, UpdateBeatCount, beatCountRef, metronomeAudioBuff
           </div>
         </div>
         <BeatDisplay beat={beat}/>
-      </div>
+    </div>
+    <div className = "start-stop-frame">
+      {
+        isPlaying ? 
+        <StopButton onClick={stopMusic} disabled={clickFigureDrawing}/> :
+        <StartButton onClick={startMusic} disabled={clickFigureDrawing}/>
+      }
+    </div>
+    </>
   );
 };

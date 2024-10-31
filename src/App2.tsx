@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
 import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
+import { ChangeColorToTrueColor } from './hooks/useColorToTrueColor.tsx';
 import { ChangeFigureToAnimation, DrawAnimation, drawFigure00, drawFigure01, drawFigure02, drawFigure03, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
 import { noteMapping } from './hooks/useInstrumentIdToPlayer.tsx';
 import { ChangeMousePosToNoteId } from './hooks/useMousePosToNoteId.tsx';
@@ -13,7 +14,6 @@ import { Layer, Type } from "./types/layer.tsx";
 import { LoopInfo, Position } from './types/loop.tsx';
 
 function App() {
-  const canvasColor = 'white';
   const isDrawing= useRef(false);
 
   //キャンバスに反映されるすべてのレイヤー
@@ -374,7 +374,7 @@ function App() {
           // ペンのスタイルを設定
           context.lineWidth = layer.lineWidth; 
           context.lineCap = 'round'; 
-          context.strokeStyle = layer.color;
+          context.strokeStyle = ChangeColorToTrueColor(layer.color);
 
           const currentX: number = event.offsetX;
           const currentY: number = event.offsetY;
@@ -561,7 +561,9 @@ function App() {
 
       }
     };  
-  }, [isDrawing, canvasColor, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking]);
+  }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking]);
+
+  console.log(loops);
 
   return (
     <div className="container">
@@ -586,6 +588,7 @@ function App() {
       </div> 
       
       <Player 
+          isPlaying={isPlaying}
           loops={loops}
           UpdateBeatCount={UpdateBeatCount}
           beatCountRef={beatCountRef}
@@ -604,7 +607,6 @@ function App() {
           layers={layers}
           setLayers={setLayers}
           currentLayerId={currentLayerId}
-          canvasColor={canvasColor}
           setLoops={setLoops}
           quantizeRef={quantizeRef}
           clickFigureDrawing={clickFigureDrawing}
@@ -613,7 +615,7 @@ function App() {
           positionRef={positionRef}
         />
       <LayerTab
-          canvasColor={canvasColor}
+          setClickFigureDrawing={setClickFigureDrawing}
           layers={layers}
           setLayers={setLayers}
           currentLayerId={currentLayerId}
@@ -622,8 +624,8 @@ function App() {
           setTotalLayer={setTotalLayer}
           setLoops={setLoops}
           clickFigureDrawing={clickFigureDrawing}
+          positionRef={positionRef}
         />
-      {/* 他のコンテンツがここに入ります */}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH, MARGIN, PROCESS_SPAN, SIZE, SPEED, SPEED_2
 import { Direction } from "../types/direction.tsx";
 import { Layer } from "../types/layer.tsx";
 import { Position } from "../types/loop.tsx";
+import { ChangeColorToTrueColor } from "./useColorToTrueColor.tsx";
 
 export const drawFigure00 = (context: CanvasRenderingContext2D | null, layer: Layer, x:number, y:number) => {
   if (!context || !layer) return;
@@ -15,7 +16,7 @@ export const drawFigure00 = (context: CanvasRenderingContext2D | null, layer: La
         : (y < halfSize + MARGIN) ? halfSize + MARGIN 
         : y;
 
-  context.strokeStyle = layer.color;
+  context.strokeStyle = ChangeColorToTrueColor(layer.color);
   context.lineWidth = layer.lineWidth;
   context.beginPath();
   context.moveTo(centerX + halfSize, centerY);
@@ -40,7 +41,7 @@ export const drawFigure01 = (context: CanvasRenderingContext2D | null, layer: La
         : (y < halfSize + MARGIN) ? halfSize + MARGIN 
         : y;
 
-  context.strokeStyle = layer.color;
+  context.strokeStyle = ChangeColorToTrueColor(layer.color);
   context.lineWidth = layer.lineWidth;
   context.beginPath();
   context.moveTo(centerX, centerY);
@@ -88,7 +89,7 @@ export const drawFigure03 = (context: CanvasRenderingContext2D | null, layer: La
         : (y < halfSize + MARGIN) ? halfSize + MARGIN 
         : y;
 
-  context.strokeStyle = layer.color;
+  context.strokeStyle = ChangeColorToTrueColor(layer.color);
   context.lineWidth = layer.lineWidth;
   context.beginPath();
   context.moveTo(centerX + halfSize, centerY - halfSize);
@@ -145,20 +146,16 @@ export const RedrawFigure = (context: CanvasRenderingContext2D | null, layer: La
 }
 
 export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, directionArray: (Direction | null)[], layer: Layer, x:number, y:number) => {
-  console.log(directionArray);
   if (!context) return;
 
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   drawFrame(layer, x, y);
 
-  console.log("finish drawFrame"); 
-  console.log(SPEED_2)  
-
   let currentX = x - SIZE;
   let currentY = y - SIZE;
   
-  context.strokeStyle = layer.color;
+  context.strokeStyle = ChangeColorToTrueColor(layer.color);
   context.lineWidth = layer.lineWidth;
 
   context.beginPath();

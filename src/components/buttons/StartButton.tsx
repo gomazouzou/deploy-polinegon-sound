@@ -15,7 +15,7 @@ export const StartButton = ({onClick, disabled}: Props) => {
       disabled={disabled}
       style={{ width: 58, height: 58 }}
     >
-      <img src={startButton} alt="add" width={58} height={58} />
+      <img src={startButton} alt="start" width={58} height={58} />
     </IconButton>
   );
 };

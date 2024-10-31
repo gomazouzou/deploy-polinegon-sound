@@ -16,7 +16,6 @@ type Props = {
   layers: Layer[];
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   currentLayerId: number;
-  canvasColor: string;
   setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
   quantizeRef: React.MutableRefObject<number>
   clickFigureDrawing: boolean;
@@ -25,7 +24,7 @@ type Props = {
   positionRef: React.MutableRefObject<Position>;
 }
 
-export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLayers, currentLayerId, canvasColor, setLoops, quantizeRef, clickFigureDrawing, setClickFigureDrawing, isPlaying, positionRef}: Props) => { 
+export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLayers, currentLayerId, setLoops, quantizeRef, clickFigureDrawing, setClickFigureDrawing, isPlaying, positionRef}: Props) => { 
   const buttonStyle = (num: number) => ({
     borderRadius: 0,
     backgroundColor: isSelected(num) ? "#E0E0E0" : "transparent", 
