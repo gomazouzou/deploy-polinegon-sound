@@ -40,7 +40,7 @@ export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled, 
         }}
         style={{ border: isHilighted ? '3px solid black' : '3px solid transparent' }}
       >
-        <div className="layercolorframe">
+        <div className="layercolorframe" >
           <ColorButton color={layer.color} width={30}/>
           <span>{layer.color}</span>
         </div>

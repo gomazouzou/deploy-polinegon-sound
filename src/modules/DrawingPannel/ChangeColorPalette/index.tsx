@@ -31,16 +31,40 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
   return (
     <div className="colorframe">
       <div className="colorframe1">
-        <ColorButton color="yellow" setPenColor={changeLayerColor} style={buttonStyle("yellow")} width={30}/>
-        <ColorButton color="red" setPenColor={changeLayerColor} style={buttonStyle("red")} width={30}/>
-        <ColorButton color="blue" setPenColor={changeLayerColor} style={buttonStyle("blue")} width={30}/>
-        <ColorButton color="purple" setPenColor={changeLayerColor} style={buttonStyle("purple")} width={30}/>
+        {['yellow', 'red', 'blue', 'purple'].map((buttonColor) => (
+          <div
+            key={buttonColor}
+            style={{
+              padding: '4px',
+              borderRadius: '50%',
+              backgroundColor: isSelected(buttonColor) ? '#E0E0E0' : 'transparent',
+            }}
+          >
+            <ColorButton
+              color={buttonColor}
+              setPenColor={changeLayerColor}
+              width={28}
+            />
+          </div>
+        ))}
       </div>
       <div className="colorframe2">
-        <ColorButton color="green" setPenColor={changeLayerColor} style={buttonStyle("green")} width={30}/>
-        <ColorButton color="lightblue" setPenColor={changeLayerColor} style={buttonStyle("lightblue")} width={30}/>
-        <ColorButton color="orange" setPenColor={changeLayerColor} style={buttonStyle("orange")} width={30}/>
-        <ColorButton color="black" setPenColor={changeLayerColor} style={buttonStyle("black")} width={30}/>
+      {['green', 'lightblue', 'orange', 'black'].map((buttonColor) => (
+          <div
+            key={buttonColor}
+            style={{
+              padding: '4px',
+              borderRadius: '50%',
+              backgroundColor: isSelected(buttonColor) ? '#E0E0E0' : 'transparent',
+            }}
+          >
+            <ColorButton
+              color={buttonColor}
+              setPenColor={changeLayerColor}
+              width={28}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

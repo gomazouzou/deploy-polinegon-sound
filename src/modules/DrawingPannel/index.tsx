@@ -28,7 +28,7 @@ type Props = {
 export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLayers, currentLayerId, canvasColor, setLoops, quantizeRef, clickFigureDrawing, setClickFigureDrawing, isPlaying, positionRef}: Props) => { 
   const buttonStyle = (num: number) => ({
     borderRadius: 0,
-    backgroundColor: isSelected(num) ? 'rgba(100, 181, 246, 0.4)' : "transparent", // より濃い青色に変更
+    backgroundColor: isSelected(num) ? "#E0E0E0" : "transparent", 
     width: "80px",
     height: "80px",
 });
