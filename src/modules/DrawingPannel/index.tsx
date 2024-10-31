@@ -8,6 +8,7 @@ import { RedrawLayer } from "../../functions/Canvas.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo, Position } from "../../types/loop.tsx";
 import { ChangeColorPalette } from "./ChangeColorPalette/index.tsx";
+import { QuantizeSelector } from "./QuantizeSelector/index.tsx";
 
 
 type Props = {
@@ -33,16 +34,11 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
 });
 
   const isSelected = (num: number) => currentFigure === num;
-
   const currentLayer = layers.find(layer => layer.id === currentLayerId);
 
   return(
     <div className='drawpannel'>
-      <div className='intervalsetting'>
-        <div className='intervalexplain'>
-          <span>音の鳴る間隔</span>
-        </div>
-      </div>
+      <QuantizeSelector quantizeRef={quantizeRef} />
       <div className='widthsetting'>
         <div className='intervalexplain'>
           <span>ふとさ</span>

@@ -655,3 +655,64 @@ code {
   justify-content: center; 
   align-items: center;          
 }
+
+.quantize-selector {
+  display: flex;
+  gap: 20px;
+  background:  #F0F0F0;
+  width: 102.272px;
+  height: 81.548px;
+  border-radius: 12px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantize-selector span{
+  color: #000;
+  font-family: "NicoMoji+v2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column; 
+  gap: 2px; 
+}
+
+.slider-container {
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.slider-track {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #e0e0e0;
+}
+
+.slider-handle {
+  position: absolute;
+  width: 24px;  
+  height: 24px; 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transform: translateX(-50%);
+  transition: transform 0.2s;
+}
+
+.slider-handle:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.slider-handle:active {
+  transform: translateX(-50%) scale(0.95);
+}
