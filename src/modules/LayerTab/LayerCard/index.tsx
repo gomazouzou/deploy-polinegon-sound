@@ -5,6 +5,7 @@ import { DeleteButton } from "../../../components/buttons/DeleteButton.tsx";
 import { FreeDrawingButton } from "../../../components/buttons/FreeDrawingButton.tsx";
 import { LineButton } from "../../../components/buttons/LineButton.tsx";
 import { PoligoneButton } from "../../../components/buttons/PoligoneButton.tsx";
+import { ChangeColorToBackColor, ChangeColorToTrueColor } from "../../../hooks/useColorToTrueColor.tsx";
 import { Layer, Type } from "../../../types/layer.tsx";
 import { LoopInfo } from "../../../types/loop.tsx";
 
@@ -38,7 +39,7 @@ export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled, 
           if (disabled) return;
           setCurrentLayerId(layer.id);
         }}
-        style={{ border: isHilighted ? '3px solid black' : '3px solid transparent' }}
+        style={{ border: isHilighted ? '3px solid' + ChangeColorToTrueColor(layer.color) : '3px solid transparent',backgroundColor : ChangeColorToBackColor(layer.color)}}
       >
         <div className="layercolorframe" >
           <ColorButton color={layer.color} width={30}/>

@@ -156,7 +156,6 @@ code {
   display: flex; 
   justify-content: space-between;
   align-items: center;
-  background: #E1F961;
 }
 
 .layericon {
@@ -166,7 +165,6 @@ code {
   justify-content: flex-end;
   align-items: center;
   flex-shrink: 0;
-  background-color: #E1F961;
 }
 
 .layercolorframe{
