@@ -16,22 +16,21 @@ export const LineWidthSlider = ({layers, setLayers, currentLayerId, redrawLayer}
   const sliderRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleStart = (clientX: number) => {
     setIsDragging(true);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMove = (clientX: number) => {
     if (!isDragging || !sliderRef.current || !targetLayer) return;
 
     const sliderRect = sliderRef.current.getBoundingClientRect();
-    // ボタンの半分の幅を考慮して調整
-    const position = Math.max(0, Math.min(e.clientX - sliderRect.left, sliderRect.width));
+    const position = Math.max(0, Math.min(clientX - sliderRect.left, sliderRect.width));
     const percentage = position / sliderRect.width;
 
     const newWidth = Math.round(MIN_LINE_WIDTH + percentage * (MAX_LINE_WIDTH - MIN_LINE_WIDTH));
 
     const updatedLayer = { ...targetLayer, lineWidth: newWidth };
-  
+
     setLayers(prevLayers =>
       prevLayers.map(layer =>
         layer.id === currentLayerId
@@ -42,41 +41,68 @@ export const LineWidthSlider = ({layers, setLayers, currentLayerId, redrawLayer}
     redrawLayer(updatedLayer);
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     if (isDragging) {
       setIsDragging(false);
     }
   };
 
+  // マウスイベントハンドラー
+  const handleMouseDown = (e: React.MouseEvent) => {
+    handleStart(e.clientX);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (isDragging) {
+      handleMove(e.clientX);
+    }
+  };
+
+  // タッチイベントハンドラー
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault(); // デフォルトのスクロール動作を防止
+    handleStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    if (isDragging) {
+      e.preventDefault();
+      handleMove(e.touches[0].clientX);
+    }
+  };
+
   useEffect(() => {
-    const handleMouseMoveEffect = (e: MouseEvent) => {
-      if (isDragging) {
-        handleMouseMove(e);
-      }
-    };
+    const handleMouseMoveEffect = (e: MouseEvent) => handleMouseMove(e);
+    const handleTouchMoveEffect = (e: TouchEvent) => handleTouchMove(e);
+    const handleEndEffect = () => handleEnd();
 
-    const handleMouseUpEffect = () => {
-      if (isDragging) {
-        handleMouseUp();
-      }
-    };
-
+    // マウスイベント
     window.addEventListener('mousemove', handleMouseMoveEffect);
-    window.addEventListener('mouseup', handleMouseUpEffect);
+    window.addEventListener('mouseup', handleEndEffect);
+
+    // タッチイベント
+    window.addEventListener('touchmove', handleTouchMoveEffect, { passive: false });
+    window.addEventListener('touchend', handleEndEffect);
+    window.addEventListener('touchcancel', handleEndEffect);
 
     return () => {
+      // マウスイベントのクリーンアップ
       window.removeEventListener('mousemove', handleMouseMoveEffect);
-      window.removeEventListener('mouseup', handleMouseUpEffect);
+      window.removeEventListener('mouseup', handleEndEffect);
+
+      // タッチイベントのクリーンアップ
+      window.removeEventListener('touchmove', handleTouchMoveEffect);
+      window.removeEventListener('touchend', handleEndEffect);
+      window.removeEventListener('touchcancel', handleEndEffect);
     };
   }, [isDragging]);
 
   if (!targetLayer) return null;
 
-  const SLIDER_WIDTH = 200; 
-  const BUTTON_WIDTH = 28; 
+  const SLIDER_WIDTH = 200;
+  const BUTTON_WIDTH = 28;
   const calculateButtonPosition = () => {
     const percentage = (targetLayer.lineWidth - MIN_LINE_WIDTH) / (MAX_LINE_WIDTH - MIN_LINE_WIDTH);
-    // スライダーの実効可動域を計算
     const effectiveSliderWidth = SLIDER_WIDTH - BUTTON_WIDTH;
     return percentage * effectiveSliderWidth;
   };
@@ -96,6 +122,7 @@ export const LineWidthSlider = ({layers, setLayers, currentLayerId, redrawLayer}
               cursor: 'pointer',
             }}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
           >
             <ColorButton color={targetLayer?.color} width={28} />
           </div>
