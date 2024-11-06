@@ -161,3 +161,46 @@ const setFigure03Animation = (centerX: number, centerY: number) => {
   }
   return { x, y };
 }
+
+export const setFreeAnimation = (edge: number[], centerX: number, centerY: number) => {
+  const x: number[] = Array(ANIMATION_LENGTH).fill(-1);
+  const y: number[] = Array(ANIMATION_LENGTH).fill(-1);
+
+  let currentX = centerX - SIZE;
+  let currentY = centerY - SIZE;
+  const speed = SIZE / ANIMATION_LENGTH * 8;
+  const framePerEdge = ANIMATION_LENGTH / edge.length;
+
+  for (let i = 0; i < 2; i++) {
+    let directionNumber = -1;
+
+    for (let j = 0; j < edge.length / 2; j++) {
+      //方向の反転
+      if (edge[j + i * edge.length / 2] !== 0) {
+        directionNumber *= -1;
+      }
+      for (let k = 0; k < framePerEdge; k++) {
+        x[k + i * ANIMATION_LENGTH / 2 + j * framePerEdge] = currentX;
+        y[k + i * ANIMATION_LENGTH / 2 + j * framePerEdge] = currentY;
+        
+        if (directionNumber === 1){
+          if (i === 0){
+            currentY += speed;
+          }
+          else{
+            currentX -= speed;
+          }
+        }
+        else{
+          if (i === 0){
+            currentX += speed;
+          }
+          else{
+            currentY -= speed;
+          }
+        }
+      }
+    }
+  }
+  return {x, y};
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
-import { setFigureAnimation } from './functions/Animation.tsx';
+import { setFigureAnimation, setFreeAnimation } from './functions/Animation.tsx';
 import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
 import { ChangeColorToTrueColor } from './hooks/useColorToTrueColor.tsx';
 import { drawFigure00, drawFigure01, drawFigure02, drawFigure03, drawFrame, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
@@ -59,14 +59,12 @@ function App() {
   const currentDirectionRef = useRef<Direction>(Direction.Down);
   const directionRef = useRef<(Direction | null)[]>(Array(32).fill(null));
   
-
   const positionRef = useRef<Position>({ x: 0, y: 0 });
 
   //再生中かどうか
   const [isPlaying, setIsPlaying] = useState(false);
 
   const currentColorRef = useRef<string>("black");
-
 
   //クリックの状態管理
   const isClicking = useRef(false);
@@ -261,8 +259,26 @@ function App() {
         startFigureDrawing.current = false;
         setClickFigureDrawing(false);
         setTotalLoop(totalLoop + 1);
+
+        const { x: xAnimation, y: yAnimation } = setFreeAnimation(isEdgeRef.current, positionRef.current.x, positionRef.current.y);
+        animationsRef.current = [
+          ...animationsRef.current, 
+          {
+            id: totalAnimation,
+            layerId: currentLayerId,
+            ref: React.createRef<HTMLCanvasElement>(),
+            color: currentLayerRef.current.color,
+            lineWidth: currentLayerRef.current.lineWidth,
+            x: xAnimation,
+            y: yAnimation,
+            isVisible: currentLayerRef.current.isVisible,
+          }
+        ];
+        setTotalAnimation(totalAnimation + 1);
       } 
     }
+
+    //自由描画中の処理
     if(startFigureDrawing.current && beatCount % (PROCESS_SPAN / 16) === 0 && figureAudioSamplers){
       const index = beatCount / (PROCESS_SPAN / 16);
       //二つの角の場合（左上、右下）
