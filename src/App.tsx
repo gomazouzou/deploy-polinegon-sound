@@ -41,8 +41,8 @@ function App() {
   const noteArrayRef16 = useRef<number[]>(Array(32).fill(0));
   //クオンタイズの設定
   const quantizeRef = useRef<number>(16);
-  //自由図形描画を使うかどうか
 
+  //自由図形描画を使うかどうか
   const [isAddFreeDrawing, setIsAddFreeDrawing] = useState(false);
 
   const [clickFigureDrawing, setClickFigureDrawing] = useState(false);
@@ -650,6 +650,11 @@ function App() {
     };  
   }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking, totalAnimation]);
 
+  useEffect(() => {
+    console.log(animationsRef.current);
+  }
+  ,[animationsRef.current]);
+
   return (
     <div className="container">
       <div className ="canvas">
@@ -675,7 +680,7 @@ function App() {
           animationsRef.current.map((animation, index) => (
             animation.isVisible &&
             <canvas
-              key={animation.layerId + totalLayer}
+              key={animation.layerId}
               ref={animation.ref}
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}

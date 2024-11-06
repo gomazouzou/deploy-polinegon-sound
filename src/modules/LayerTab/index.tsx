@@ -49,7 +49,9 @@ export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, 
     });
     setTotalLayer(totalLayer + 1);
     setCurrentLayerId(totalLayer + 1);
-    setIsAddFreeLayer(true);
+    if (type === Type.Free){
+      setIsAddFreeLayer(true);
+    }
   };
 
   const deleteLayer = (layerId: number, setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>) => {

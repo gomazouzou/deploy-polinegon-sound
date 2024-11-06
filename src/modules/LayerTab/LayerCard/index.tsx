@@ -43,8 +43,14 @@ export const LayerCard = ({layer, setCurrentLayerId, isHilighted, disabled, setL
   };
 
   const [, forceUpdate] = React.useState({});
+  const [isButtonCooldown, setIsButtonCooldown] = React.useState(false);
+  const COOLDOWN_TIME = 500; 
   const onClickVisibility = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    if (isButtonCooldown) return;
+    setIsButtonCooldown(true);
+    
     setLayers(prevLayers => {
       const newLayers = [...prevLayers];
       const targetLayerIndex = newLayers.findIndex(tlayer => tlayer.id === layer.id);
@@ -57,6 +63,10 @@ export const LayerCard = ({layer, setCurrentLayerId, isHilighted, disabled, setL
         : animation
     );
     forceUpdate({});
+    
+    setTimeout(() => {
+      setIsButtonCooldown(false);
+    }, COOLDOWN_TIME);
   }
 
   return (
