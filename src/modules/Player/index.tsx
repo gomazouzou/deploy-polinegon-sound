@@ -157,7 +157,8 @@ export const Player = ({
     playPart?.forEach(loop => loop.stop());
     metronome?.stop();
     Tone.Transport.stop();
-    setBeat(3);
+    Tone.Transport.position = 0; 
+    setBeat(7);
     setMetronome(null);
     setPlayPart(null);
     beatCountRef.current = 0;
