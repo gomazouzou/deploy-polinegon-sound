@@ -90,6 +90,6 @@ export const ChangeFreePlayerToLoop = (player: Tone.Player, rhythm_array: number
   }, rhythmPattern);
 
   newPart.loop = true;
-  newPart.loopEnd = "1m";
+  newPart.loopEnd = "2m";
   return newPart;
 }
