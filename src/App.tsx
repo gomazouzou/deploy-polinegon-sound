@@ -650,11 +650,6 @@ function App() {
     };  
   }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking, totalAnimation]);
 
-  useEffect(() => {
-    console.log(animationsRef.current);
-  }
-  ,[animationsRef.current]);
-
   return (
     <div className="container">
       <div className ="canvas">
