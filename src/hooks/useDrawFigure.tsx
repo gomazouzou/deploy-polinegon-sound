@@ -151,11 +151,9 @@ export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, direc
   const frameContext = layer.ref.current?.getContext("2d");
   if (frameContext) {
     frameContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    console.log("clear")
   }
 
   if (!is_end){
-    console.log("drawFrame")
     drawFrame(layer, x, y);
   }
   else{

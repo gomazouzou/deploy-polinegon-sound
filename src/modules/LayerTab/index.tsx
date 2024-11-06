@@ -2,14 +2,12 @@ import React from "react";
 import { AddButton } from "../../components/buttons/AddButton.tsx";
 import { useDisclosure } from "../../hooks/useDiscloser.tsx";
 
-import { drawFrame } from "../../hooks/useDrawFigure.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
-import { LoopInfo, Position } from "../../types/loop.tsx";
+import { LoopInfo } from "../../types/loop.tsx";
 import { AddLayerDialog } from "./AddLayerDialog/index.tsx";
 import { LayerCard } from "./LayerCard/index.tsx";
 
 type Props = {
-  setClickFigureDrawing: React.Dispatch<React.SetStateAction<boolean>>;
   layers: Layer[];
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>
   currentLayerId: number;
@@ -18,10 +16,10 @@ type Props = {
   setTotalLayer: React.Dispatch<React.SetStateAction<number>>;
   setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
   clickFigureDrawing: boolean;
-  positionRef: React.MutableRefObject<Position>;
+  setIsAddFreeLayer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const LayerTab = ({setClickFigureDrawing, layers, setLayers, currentLayerId, setCurrentLayerId, totalLayer, setTotalLayer, setLoops, clickFigureDrawing, positionRef}: Props) => {
+export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, totalLayer, setTotalLayer, setLoops, clickFigureDrawing, setIsAddFreeLayer}: Props) => {
 
   const {
     isOpen: isCOpenAddLayerDialog,
@@ -44,17 +42,11 @@ export const LayerTab = ({setClickFigureDrawing, layers, setLayers, currentLayer
           type: type,
         }
       ]
-      setTotalLayer(totalLayer + 1);
-      setCurrentLayerId(totalLayer + 1);
-
-      const currentLayer = layers.find(layer => layer.id === currentLayerId);
-      if (type === Type.Free){
-        setClickFigureDrawing(!clickFigureDrawing);
-        const position: Position = drawFrame(currentLayer);
-        positionRef.current = position;
-      }
       return newLayers;
     });
+    setTotalLayer(totalLayer + 1);
+    setCurrentLayerId(totalLayer + 1);
+    setIsAddFreeLayer(true);
   };
 
   const deleteLayer = (layerId: number, setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>) => {

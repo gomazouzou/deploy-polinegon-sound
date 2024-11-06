@@ -3,7 +3,7 @@ import * as Tone from 'tone';
 import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
 import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
 import { ChangeColorToTrueColor } from './hooks/useColorToTrueColor.tsx';
-import { drawFigure00, drawFigure01, drawFigure02, drawFigure03, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
+import { drawFigure00, drawFigure01, drawFigure02, drawFigure03, drawFrame, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
 import { noteMapping } from './hooks/useInstrumentIdToPlayer.tsx';
 import { ChangeMousePosToNoteId } from './hooks/useMousePosToNoteId.tsx';
 import { DrawingPannel } from './modules/DrawingPannel/index.tsx';
@@ -41,6 +41,9 @@ function App() {
   //クオンタイズの設定
   const quantizeRef = useRef<number>(16);
   //自由図形描画を使うかどうか
+
+  const [isAddFreeDrawing, setIsAddFreeDrawing] = useState(false);
+
   const [clickFigureDrawing, setClickFigureDrawing] = useState(false);
   const waitFigureDrawing = useRef<boolean>(false)
   const startFigureDrawing = useRef<boolean>(false);
@@ -142,11 +145,19 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log(isAddFreeDrawing);
     const layer = layers.find(layer => layer.id === currentLayerId);
     if (!layer) return;
     currentLayerRef.current = layer;
     currentColorRef.current = layer?.color || "black";
-  }, [layers, currentLayerId]);
+
+    if (layer.type === Type.Free && isAddFreeDrawing) {
+      setClickFigureDrawing(true);
+      const position: Position = drawFrame(layer);
+      positionRef.current = position;
+      setIsAddFreeDrawing(false);
+    }
+  }, [layers, currentLayerId, isAddFreeDrawing]);
 
   useEffect(() => {
     waitFigureDrawing.current = clickFigureDrawing;
@@ -229,13 +240,18 @@ function App() {
               ref: React.createRef<HTMLCanvasElement>(),
             }
           ];
-          setTotalLoop(totalLoop + 1);
           return newLoop;
         });
+
+        const canvas = currentLayerRef.current.ref.current;
+        if (!canvas) return;
+        const context = canvas.getContext('2d');
+        RedrawFreeFigure(context, directionRef.current, currentLayerRef.current, positionRef.current.x, positionRef.current.y, true);
 
         waitFigureDrawing.current = false;
         startFigureDrawing.current = false;
         setClickFigureDrawing(false);
+        setTotalLoop(totalLoop + 1);
       } 
     }
     if(startFigureDrawing.current && beatCountRef.current % (PROCESS_SPAN / 16) === 0 && figureAudioSamplers){
@@ -616,7 +632,6 @@ function App() {
           positionRef={positionRef}
         />
       <LayerTab
-          setClickFigureDrawing={setClickFigureDrawing}
           layers={layers}
           setLayers={setLayers}
           currentLayerId={currentLayerId}
@@ -625,7 +640,7 @@ function App() {
           setTotalLayer={setTotalLayer}
           setLoops={setLoops}
           clickFigureDrawing={clickFigureDrawing}
-          positionRef={positionRef}
+          setIsAddFreeLayer={setIsAddFreeDrawing}
         />
     </div>
   );
