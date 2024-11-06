@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AddButton } from "../../components/buttons/AddButton.tsx";
 import { useDisclosure } from "../../hooks/useDiscloser.tsx";
 
@@ -64,19 +64,21 @@ export const LayerTab = ({setClickFigureDrawing, layers, setLayers, currentLayer
   
     const newLayers = layers.filter(layer => layer.id !== layerId);
     setLayers(newLayers);
-    
-    const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);  
+     
     if (currentLayerId === layerId){
-      const newCurrentIndex = currentIndex - 1 > 0 ? newLayers[currentIndex - 1].id : newLayers[0].id
+      const currentIndex = layers.findIndex(layer => layer.id === currentLayerId); 
+      const newCurrentIndex = newLayers[currentIndex - 1].id;
       setCurrentLayerId(newCurrentIndex);
     }
-    
 
     //ループ情報の更新
     setLoops(prevLoops => prevLoops.filter(loop => loop.layer_id !== layerId));
   };
-  
-  const currentIndex = layers.findIndex(layer => layer.id === currentLayerId);
+  useEffect(() => {
+    console.log(layers);
+    console.log(currentLayerId);
+  }
+  ,[layers, currentLayerId]);
 
   return(
     <>
@@ -98,9 +100,8 @@ export const LayerTab = ({setClickFigureDrawing, layers, setLayers, currentLayer
       {layers.map((layer, index) => (
             <LayerCard
               layer={layer}
-              id={index}
               setCurrentLayerId={setCurrentLayerId}
-              isHilighted={currentIndex === index} 
+              isHilighted={layer.id === currentLayerId} 
               disabled={clickFigureDrawing}
               clickFigureDrawing={clickFigureDrawing}
               deleteLayer={deleteLayer}

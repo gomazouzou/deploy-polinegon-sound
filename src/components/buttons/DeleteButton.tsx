@@ -3,7 +3,7 @@ import React from "react";
 import deleteButton from '../../images/delete_button.png';
 
 type Props = {
-  onClick: () => void;
+  onClick: (e: React.MouseEvent) => void;
   disabled: boolean;
 }
 

@@ -12,7 +12,6 @@ import { LoopInfo } from "../../../types/loop.tsx";
 
 type Props = {
   layer: Layer;
-  id: number;
   setCurrentLayerId: React.Dispatch<React.SetStateAction<number>>;
   isHilighted: boolean;
   disabled: boolean;
@@ -21,7 +20,7 @@ type Props = {
   deleteLayer: (layerId: number, setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>) => void;
 }
 
-export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled, setLoops, clickFigureDrawing, deleteLayer}: Props) => {
+export const LayerCard = ({layer, setCurrentLayerId, isHilighted, disabled, setLoops, clickFigureDrawing, deleteLayer}: Props) => {
   const getTypeButton = (type: Type) => {
     switch (type) {
       case Type.Line:
@@ -32,6 +31,11 @@ export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled, 
         return <FreeDrawingButton width={36}/>;
     }
   }
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // イベントの伝播を停止
+    deleteLayer(layer.id, setLoops);
+  };
+
   return (
       <div 
         className='layercard' 
@@ -47,7 +51,7 @@ export const LayerCard = ({layer, id, setCurrentLayerId, isHilighted, disabled, 
         </div>
         <div className="layericon">
           {getTypeButton(layer.type)}
-          <DeleteButton onClick={() => deleteLayer(layer.id, setLoops)} disabled={clickFigureDrawing}/>
+          <DeleteButton onClick={handleDeleteClick} disabled={clickFigureDrawing}/>
         </div>
       </div>
   )

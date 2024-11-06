@@ -19,7 +19,7 @@ function App() {
   //キャンバスに反映されるすべてのレイヤー
   const [layers, setLayers] = useState<Layer[]>([{id: 0, ref: React.createRef(), color:"black", lineWidth: DEFAULT_LINE_WIDTH, drawings: [], figures: [], type: Type.Line, edge:[]}]); 
   //削除したものも含めたレイヤーの通し番号
-  const [totalLayer, setTotalLayer] = useState(1); 
+  const [totalLayer, setTotalLayer] = useState(0); 
   //現在描画を行うレイヤーの番号
   const [currentLayerId, setCurrentLayerId] = useState(0); 
   const currentLayerRef = useRef<Layer>(layers[0]);
