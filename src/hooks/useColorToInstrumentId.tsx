@@ -1,3 +1,5 @@
+import { Type } from "../types/layer.tsx";
+
 export const ChangeColorToInstrumentId = (color: string) => {
   switch (color) {
     case "black":
@@ -20,3 +22,26 @@ export const ChangeColorToInstrumentId = (color: string) => {
       return 0;
   }
 };
+
+export const ChangeColorToInstrumentName = (color: string, type: Type) => {
+  switch (color) {
+    case "black":
+      return type === Type.Line ? "piano" : "kick";
+    case "red":
+      return type === Type.Line ? "violin" : "snare";
+    case "blue":
+      return type === Type.Line ? "bass" : "hi hat1";
+    case "yellow":
+      return type === Type.Line ? "flute" : "clap";
+    case "green":
+      return type === Type.Line ? "synth1" : "hi hat2";
+    case "orange":
+      return type === Type.Line ? "xlylo" : "tom";
+    case "lightblue":
+      return type === Type.Line ? "synth2" : "snap";
+    case "purple":
+      return type === Type.Line ? "picopico" : "cymbal";
+    default:
+      return "piano";
+  }
+}

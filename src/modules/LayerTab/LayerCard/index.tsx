@@ -5,6 +5,7 @@ import { DeleteButton } from "../../../components/buttons/DeleteButton.tsx";
 import { FreeDrawingButton } from "../../../components/buttons/FreeDrawingButton.tsx";
 import { LineButton } from "../../../components/buttons/LineButton.tsx";
 import { PoligoneButton } from "../../../components/buttons/PoligoneButton.tsx";
+import { ChangeColorToInstrumentName } from "../../../hooks/useColorToInstrumentId.tsx";
 import { ChangeColorToBackColor, ChangeColorToTrueColor } from "../../../hooks/useColorToTrueColor.tsx";
 import { Layer, Type } from "../../../types/layer.tsx";
 import { LoopInfo } from "../../../types/loop.tsx";
@@ -47,7 +48,7 @@ export const LayerCard = ({layer, setCurrentLayerId, isHilighted, disabled, setL
       >
         <div className="layercolorframe" >
           <ColorButton color={layer.color} width={30}/>
-          <span>{layer.color}</span>
+          <span>{ChangeColorToInstrumentName(layer.color, layer.type)}</span>
         </div>
         <div className="layericon">
           {getTypeButton(layer.type)}
