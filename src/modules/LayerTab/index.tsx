@@ -98,6 +98,8 @@ export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, 
               clickFigureDrawing={clickFigureDrawing}
               deleteLayer={deleteLayer}
               setLoops={setLoops}
+              setLayers={setLayers}
+              animationsRef={animationsRef}
             />
           ))}
       </div>

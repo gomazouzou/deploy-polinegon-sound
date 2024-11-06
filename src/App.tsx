@@ -265,7 +265,7 @@ function App() {
           ...animationsRef.current, 
           {
             id: totalAnimation,
-            layerId: currentLayerId,
+            layerId: currentLayerRef.current.id,
             ref: React.createRef<HTMLCanvasElement>(),
             color: currentLayerRef.current.color,
             lineWidth: currentLayerRef.current.lineWidth,
@@ -465,7 +465,6 @@ function App() {
 
         const  stopDrawing = () => {
           if (!context) return;
-          isDrawing.current = false;
           context.beginPath();
           prevX = null;
           prevY = null;
@@ -513,22 +512,26 @@ function App() {
           noteArrayRef16.current = Array(32).fill(0);
 
           // アニメーションの設定
-          animationsRef.current = [
-            ...animationsRef.current, 
-            {
-              id: totalAnimation,
-              layerId: currentLayerId,
-              ref: React.createRef<HTMLCanvasElement>(),
-              color: layer.color,
-              lineWidth: layer.lineWidth,
-              x: animationXRef.current,
-              y: animationYRef.current,
-              isVisible: layer.isVisible,
-            }
-          ];
-          setTotalAnimation(totalAnimation + 1);
-          animationXRef.current = Array(PROCESS_SPAN * 2).fill(-1);
-          animationYRef.current = Array(PROCESS_SPAN * 2).fill(-1);
+          if (isDrawing.current) {
+            animationsRef.current = [
+              ...animationsRef.current, 
+              {
+                id: totalAnimation,
+                layerId: currentLayerId,
+                ref: React.createRef<HTMLCanvasElement>(),
+                color: layer.color,
+                lineWidth: layer.lineWidth,
+                x: animationXRef.current,
+                y: animationYRef.current,
+                isVisible: layer.isVisible,
+              }
+            ];
+            setTotalAnimation(totalAnimation + 1);
+            animationXRef.current = Array(PROCESS_SPAN * 2).fill(-1);
+            animationYRef.current = Array(PROCESS_SPAN * 2).fill(-1);
+          }
+
+          isDrawing.current = false;
         }
 
         canvas.addEventListener('pointerdown', startDrawing);
@@ -646,6 +649,11 @@ function App() {
       }
     };  
   }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking, totalAnimation]);
+
+  useEffect(() => {
+    console.log(animationsRef.current);
+  }
+  ,[animationsRef.current]);
 
   return (
     <div className="container">

@@ -14,7 +14,7 @@ export const DeleteButton = ({onClick, disabled}: Props) => {
       onClick={onClick}
       disabled={disabled}
     >
-      <img src={deleteButton} alt="delete" width={30} height={30} />
+      <img src={deleteButton} alt="delete" width={28} height={28} />
     </IconButton>
   );
 };
