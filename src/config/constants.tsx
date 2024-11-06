@@ -18,6 +18,11 @@ export const PROCESS_SPAN = 64;
 export const SPEED = SIZE / (PROCESS_SPAN / 4);
 export const SPEED_2 = SIZE / 4;
 
+//BPM
+export const DEFAULT_BPM = 120;
+export const MIN_BPM = 60;
+export const MAX_BPM = 180;
+
 export const RHYTHM_PATTERN_1 = [
   { time: "0:0:0" },
   { time: "0:0:2" },

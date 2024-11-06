@@ -5,7 +5,7 @@ import { MinusButton } from "../../components/buttons/MinusButton.tsx";
 import { PlusButton } from "../../components/buttons/PlusButton.tsx";
 import { StartButton } from "../../components/buttons/StartButton.tsx";
 import { StopButton } from "../../components/buttons/StopButton.tsx";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, PROCESS_SPAN } from "../../config/constants.tsx";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_BPM, DEFAULT_LINE_WIDTH, MAX_BPM, MIN_BPM, PROCESS_SPAN } from "../../config/constants.tsx";
 import { ChangeFreePlayerToLoop, ChangeInstrumentIdToPlayer, ChangePlayerToLoop, ChangeSamplerToLoop } from "../../hooks/useInstrumentIdToPlayer.tsx";
 import { Layer } from "../../types/layer.tsx";
 import { LoopInfo, Type } from "../../types/loop.tsx";
@@ -50,7 +50,7 @@ export const Player = ({
     setDrawCount,
     layers,
   }: Props) => {
-  const [bpm, setBpm] = useState(120);
+  const [bpm, setBpm] = useState(DEFAULT_BPM);
   const [beat, setBeat] = useState(7);
 
   const [playPart, setPlayPart] = useState <Tone.Part[] | null>(null);
@@ -59,10 +59,10 @@ export const Player = ({
   const beatCountRef = useRef(0);
 
   const onLongPressPlusButton = () => {
-    setBpm(prevBpm => prevBpm + 2);
+    setBpm(prevBpm => Math.min(prevBpm + 2, MAX_BPM));
   }
   const onLongPressMinusButton = () => {
-    setBpm(prevBpm => prevBpm - 2);
+    setBpm(prevBpm => Math.max(prevBpm - 2, MIN_BPM));
   }
 
   const createMetronome = () => {
