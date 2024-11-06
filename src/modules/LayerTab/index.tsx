@@ -60,13 +60,13 @@ export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, 
     }
   
     const newLayers = layers.filter(layer => layer.id !== layerId);
-    setLayers(newLayers);
      
     if (currentLayerId === layerId){
       const currentIndex = layers.findIndex(layer => layer.id === currentLayerId); 
-      const newCurrentIndex = newLayers[currentIndex - 1].id;
-      setCurrentLayerId(newCurrentIndex);
+      const newCurrentLayerId = currentIndex -1 >= 0 ? layers[currentIndex - 1].id: layers[currentIndex + 1].id;
+      setCurrentLayerId(newCurrentLayerId);
     }
+    setLayers(newLayers);
 
     // ループ情報の更新
     setLoops(prevLoops => prevLoops.filter(loop => loop.layer_id !== layerId));

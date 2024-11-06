@@ -675,7 +675,7 @@ function App() {
           animationsRef.current.map((animation, index) => (
             animation.isVisible &&
             <canvas
-              key={animation.layerId}
+              key={animation.id + 100}
               ref={animation.ref}
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}
