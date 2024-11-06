@@ -656,7 +656,7 @@ function App() {
       {
           layers.map((layer, index) => (
               <canvas
-                key={layer.id}
+                key={`layer-${layer.id}-${index}`}
                 ref={layer.ref}
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
@@ -675,7 +675,7 @@ function App() {
           animationsRef.current.map((animation, index) => (
             animation.isVisible &&
             <canvas
-              key={animation.id + 100}
+              key={`animation-${animation.layerId}-${index}`}
               ref={animation.ref}
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}

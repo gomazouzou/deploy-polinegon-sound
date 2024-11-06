@@ -9,7 +9,7 @@ import { PoligoneButton } from "../../../components/buttons/PoligoneButton.tsx";
 import { VisibleButton } from "../../../components/buttons/Visiblebutton.tsx";
 import { ChangeColorToInstrumentName } from "../../../hooks/useColorToInstrumentId.tsx";
 import { ChangeColorToBackColor, ChangeColorToTrueColor } from "../../../hooks/useColorToTrueColor.tsx";
-import Animation from "../../../types/animation.tsx";
+import { Animation } from "../../../types/animation.tsx";
 import { Layer, Type } from "../../../types/layer.tsx";
 import { LoopInfo } from "../../../types/loop.tsx";
 
