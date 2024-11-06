@@ -171,8 +171,9 @@ export const setFreeAnimation = (edge: number[], centerX: number, centerY: numbe
   const speed = SIZE / ANIMATION_LENGTH * 8;
   const framePerEdge = ANIMATION_LENGTH / edge.length;
 
+  let preDirecrtion = -1;
   for (let i = 0; i < 2; i++) {
-    let directionNumber = -1;
+    let directionNumber = preDirecrtion;
 
     for (let j = 0; j < edge.length / 2; j++) {
       //方向の反転
@@ -188,7 +189,7 @@ export const setFreeAnimation = (edge: number[], centerX: number, centerY: numbe
             currentY += speed;
           }
           else{
-            currentX -= speed;
+            currentY -= speed;
           }
         }
         else{
@@ -196,9 +197,12 @@ export const setFreeAnimation = (edge: number[], centerX: number, centerY: numbe
             currentX += speed;
           }
           else{
-            currentY -= speed;
+            currentX -= speed;
           }
         }
+      }
+      if (j === edge.length / 2 - 1){
+        preDirecrtion = directionNumber;
       }
     }
   }
