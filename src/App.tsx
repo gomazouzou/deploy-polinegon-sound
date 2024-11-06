@@ -3,7 +3,7 @@ import * as Tone from 'tone';
 import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
 import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
 import { ChangeColorToTrueColor } from './hooks/useColorToTrueColor.tsx';
-import { ChangeFigureToAnimation, DrawAnimation, drawFigure00, drawFigure01, drawFigure02, drawFigure03, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
+import { drawFigure00, drawFigure01, drawFigure02, drawFigure03, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
 import { noteMapping } from './hooks/useInstrumentIdToPlayer.tsx';
 import { ChangeMousePosToNoteId } from './hooks/useMousePosToNoteId.tsx';
 import { DrawingPannel } from './modules/DrawingPannel/index.tsx';
@@ -68,6 +68,7 @@ function App() {
   const isClicking = useRef(false);
 
   const [metronomeAudioBuffer, setMetronomeAudioBuffer] = useState <AudioBuffer>();
+  const [accentAudioBuffer, setAccentAudioBuffer] = useState <AudioBuffer>();
   const [figureAudioBuffers, setFigureAudioBuffers] = useState <AudioBuffer[]>([]);
   const [lineAudioSamplers, setLineAudioSamplers] = useState <Tone.Sampler[] | null>(null);
   const [figureAudioSamplers, setFigureAudioSamplers] = useState <Tone.Sampler[] | null>(null);
@@ -95,6 +96,11 @@ function App() {
       const arrayBuffer = await response.arrayBuffer();
       const buffer = await Tone.context.decodeAudioData(arrayBuffer);
       setMetronomeAudioBuffer(buffer);
+
+      const _response = await fetch('/audio/metronome_accent.wav');
+      const _arrayBuffer = await _response.arrayBuffer();
+      const _buffer = await Tone.context.decodeAudioData(_arrayBuffer);
+      setAccentAudioBuffer(_buffer);
 
       const figureBuffers: AudioBuffer[] = [];
       for (let i = 1; i <= 8; i++) {
@@ -221,7 +227,6 @@ function App() {
               volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (currentLayerRef.current.lineWidth - DEFAULT_LINE_WIDTH),
               midi: isEdgeRef.current,
               ref: React.createRef<HTMLCanvasElement>(),
-              animation: [],
             }
           ];
           setTotalLoop(totalLoop + 1);
@@ -336,20 +341,10 @@ function App() {
       const canvas = currentLayerRef.current.ref.current;
       if (!canvas) return;
       const context = canvas.getContext('2d');
-      RedrawFreeFigure(context, directionRef.current, currentLayerRef.current, positionRef.current.x, positionRef.current.y);
+      RedrawFreeFigure(context, directionRef.current, currentLayerRef.current, positionRef.current.x, positionRef.current.y, false);
       
       isClicking.current = false;
     }
-
-
-    //アニメーションの描画
-    loops.forEach(loop => {
-      const canvas = loop.ref.current;
-      if (!canvas) return;
-      const context = canvas.getContext('2d');
-      const position = loop.animation[beatCountRef.current];
-      DrawAnimation(context, position, loop.color, loop.lineWidth);
-    });
     
     beatCountRef.current = (beatCountRef.current + 1) % (PROCESS_SPAN * 2);
   }
@@ -449,7 +444,6 @@ function App() {
                 volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
                 midi: currentNoteArray,
                 ref: React.createRef<HTMLCanvasElement>(),
-                animation: [] //後で追記
               }
             ];
             return newLoop;
@@ -529,7 +523,6 @@ function App() {
                 volume:  DEFAULT_VOLUME + MAX_VOLUME / (MAX_LINE_WIDTH - DEFAULT_LINE_WIDTH)* (layer.lineWidth - DEFAULT_LINE_WIDTH),
                 midi: [],
                 ref: React.createRef<HTMLCanvasElement>(),
-                animation: ChangeFigureToAnimation(currentFigure, centerX, centerY),
               }
             ];
             setTotalLoop(totalLoop + 1);
@@ -579,6 +572,7 @@ function App() {
                   position: 'absolute',
                   top: 0,
                   left: 0,
+                  pointerEvents: layer.id === currentLayerId ? 'auto' : 'none',
                 }}
               />
           )) 
@@ -591,11 +585,20 @@ function App() {
           UpdateBeatCount={UpdateBeatCount}
           beatCountRef={beatCountRef}
           metronomeAudioBuffer={metronomeAudioBuffer}
+          accentAudioBuffer={accentAudioBuffer}
           figureAudioBuffers={figureAudioBuffers}
           lineAudioSamplers={lineAudioSamplers}
           setIsPlaying={setIsPlaying}
           setClickFigureDrawing={setClickFigureDrawing}
           clickFigureDrawing={clickFigureDrawing}
+          setLayers={setLayers}
+          setTotalLayer={setTotalLayer}
+          setLoops={setLoops}
+          setTotalLoop={setTotalLoop}
+          setCurrentLayerId={setCurrentLayerId}
+          setCurrentFigure={setCurrentFigure}  
+          setDrawCount={setDrawCount}        
+          layers={layers}
         />
       
 

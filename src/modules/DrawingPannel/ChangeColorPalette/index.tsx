@@ -25,8 +25,8 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
   const isSelected = (color: string) => targetLayer?.color === color;
 
   return (
-    <div className="colorframe">
-      <div className="colorframe1">
+    <div className="color-frame">
+      <div className="color-frame1">
         {['yellow', 'red', 'blue', 'purple'].map((buttonColor) => (
           <div
             key={buttonColor}
@@ -44,7 +44,7 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
           </div>
         ))}
       </div>
-      <div className="colorframe2">
+      <div className="color-frame2">
       {['green', 'lightblue', 'orange', 'black'].map((buttonColor) => (
           <div
             key={buttonColor}

@@ -5,8 +5,9 @@ import { MinusButton } from "../../components/buttons/MinusButton.tsx";
 import { PlusButton } from "../../components/buttons/PlusButton.tsx";
 import { StartButton } from "../../components/buttons/StartButton.tsx";
 import { StopButton } from "../../components/buttons/StopButton.tsx";
-import { PROCESS_SPAN } from "../../config/constants.tsx";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, PROCESS_SPAN } from "../../config/constants.tsx";
 import { ChangeFreePlayerToLoop, ChangeInstrumentIdToPlayer, ChangePlayerToLoop, ChangeSamplerToLoop } from "../../hooks/useInstrumentIdToPlayer.tsx";
+import { Layer } from "../../types/layer.tsx";
 import { LoopInfo, Type } from "../../types/loop.tsx";
 import { BeatDisplay } from "./BeatDisplay/index.tsx";
 
@@ -16,14 +17,43 @@ type Props = {
   UpdateBeatCount: () => void;
   beatCountRef: React.MutableRefObject<number>;
   metronomeAudioBuffer: AudioBuffer | undefined;
+  accentAudioBuffer: AudioBuffer | undefined;
   figureAudioBuffers: AudioBuffer[];
   lineAudioSamplers: Tone.Sampler[] | null;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   setClickFigureDrawing: React.Dispatch<React.SetStateAction<boolean>>;
   clickFigureDrawing: boolean;
+  setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  setTotalLayer: React.Dispatch<React.SetStateAction<number>>;
+  setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
+  setTotalLoop: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentLayerId: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentFigure: React.Dispatch<React.SetStateAction<number>>;
+  setDrawCount: React.Dispatch<React.SetStateAction<number>>;
+  layers: Layer[];
 }
 
-export const Player = ({isPlaying, loops, UpdateBeatCount, beatCountRef, metronomeAudioBuffer, figureAudioBuffers, lineAudioSamplers, setIsPlaying, setClickFigureDrawing, clickFigureDrawing}: Props) => {
+export const Player = ({
+    isPlaying, 
+    loops, 
+    UpdateBeatCount, 
+    beatCountRef, 
+    metronomeAudioBuffer, 
+    accentAudioBuffer,
+    figureAudioBuffers, 
+    lineAudioSamplers, 
+    setIsPlaying, 
+    setClickFigureDrawing, 
+    clickFigureDrawing,
+    setLayers,
+    setTotalLayer,
+    setLoops,
+    setTotalLoop,
+    setCurrentLayerId,
+    setCurrentFigure,
+    setDrawCount,
+    layers,
+  }: Props) => {
   const [bpm, setBpm] = useState(120);
   const [beat, setBeat] = useState(7);
 
@@ -39,18 +69,28 @@ export const Player = ({isPlaying, loops, UpdateBeatCount, beatCountRef, metrono
 
   const createMetronome = () => {
     if (metronomeAudioBuffer) { 
-      const player = new Tone.Player(metronomeAudioBuffer).toDestination();
+      const normalPlayer = new Tone.Player(metronomeAudioBuffer).toDestination();
+      const accentPlayer = new Tone.Player(accentAudioBuffer).toDestination();
       const newPart = new Tone.Part((time, value) => {
-        player.start(time);
+        if (value.accent) {
+          accentPlayer.start(time);
+        }
+        else {
+          normalPlayer.start(time);
+        }
         setBeat((prevBeat) => (prevBeat + 1) % 8);
       }, [
-        { time: "0:0:0" },  
-        { time: "0:1:0" },  
-        { time: "0:2:0" }, 
-        { time: "0:3:0" },    
+        { time: "0:0:0", accent: true },  
+        { time: "0:1:0", accent: false },  
+        { time: "0:2:0", accent: false }, 
+        { time: "0:3:0", accent: false },
+        { time: "0:4:0", accent: false },
+        { time: "0:5:0", accent: false },
+        { time: "0:6:0", accent: false },
+        { time: "0:7:0", accent: false },
       ]);
       newPart.loop = true;
-      newPart.loopEnd = "1m";
+      newPart.loopEnd = "2m";
       return newPart;
     }
     else{
@@ -59,6 +99,7 @@ export const Player = ({isPlaying, loops, UpdateBeatCount, beatCountRef, metrono
   };
 
   const initializeLoops = (loops: LoopInfo[]) => {
+    Tone.Destination.volume.value = -6; 
     const newPlayParts: Tone.Part[] = [];
     loops.forEach(loop => {
       if (loop.type === Type.Poligone) {
@@ -123,6 +164,22 @@ export const Player = ({isPlaying, loops, UpdateBeatCount, beatCountRef, metrono
     setIsPlaying(false);
     setClickFigureDrawing(false);
   };
+
+  const onClickResetButton = () => {
+    layers.forEach(layer => {
+      if (!layer.ref.current) return;
+      const ctx = layer.ref.current.getContext('2d');
+      if (!ctx) return;
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    });
+    setLayers([{id: 0, ref: React.createRef(), color:"black", lineWidth: DEFAULT_LINE_WIDTH, drawings: [], figures: [], type: Type.Line, edge:[]}]);
+    setTotalLayer(1);
+    setCurrentLayerId(0);
+    setCurrentFigure(0);
+    setLoops([]);
+    setTotalLoop(0);
+    setDrawCount(0);
+  }
   
   return (
     <>
@@ -138,12 +195,16 @@ export const Player = ({isPlaying, loops, UpdateBeatCount, beatCountRef, metrono
         <BeatDisplay beat={beat}/>
     </div>
     <div className = "start-stop-frame">
+      <div className = "reset-button" onClick={onClickResetButton}>
+        <span>リセット</span>
+      </div>
       {
         isPlaying ? 
         <StopButton onClick={stopMusic} disabled={clickFigureDrawing}/> :
         <StartButton onClick={startMusic} disabled={clickFigureDrawing}/>
       }
     </div>
+    
     </>
   );
 };

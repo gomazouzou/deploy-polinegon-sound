@@ -48,8 +48,8 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
         redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
       />
       
-      <div className='colorsetting'>
-        <div className='colorexplain'>
+      <div className='color-setting'>
+        <div className='color-explain'>
           <span>色</span>
         </div>
         <ChangeColorPalette 
@@ -60,11 +60,11 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
         />
       </div>
       
-      <div className='rhythmsetting'>
-        <div className='rhythmexplain'>
+      <div className='rhythm-setting'>
+        <div className='rhythm-explain'>
           <span>図形</span>
         </div>
-        <div className='figureframe'>
+        <div className='figure-frame'>
           <Figure00Button onClick={() => setCurrentFigure(0)} style={buttonStyle(0)} disabled={currentLayer?.type !== Type.Poligone}/>
           <Figure01Button onClick={() => setCurrentFigure(1)} style={buttonStyle(1)} disabled={currentLayer?.type !== Type.Poligone}/>
           <Figure02Button onClick={() => setCurrentFigure(2)} style={buttonStyle(2)} disabled={currentLayer?.type !== Type.Poligone}/>

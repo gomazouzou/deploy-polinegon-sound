@@ -1,8 +1,6 @@
-import { context } from "tone";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, MARGIN, PROCESS_SPAN, SIZE, SPEED, SPEED_2 } from "../config/constants.tsx";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, MARGIN, SIZE, SPEED_2 } from "../config/constants.tsx";
 import { Direction } from "../types/direction.tsx";
 import { Layer } from "../types/layer.tsx";
-import { Position } from "../types/loop.tsx";
 import { ChangeColorToTrueColor } from "./useColorToTrueColor.tsx";
 
 export const drawFigure00 = (context: CanvasRenderingContext2D | null, layer: Layer, x:number, y:number) => {
@@ -146,12 +144,23 @@ export const RedrawFigure = (context: CanvasRenderingContext2D | null, layer: La
   }
 }
 
-export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, directionArray: (Direction | null)[], layer: Layer, x:number, y:number) => {
+export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, directionArray: (Direction | null)[], layer: Layer, x:number, y:number, is_end: boolean) => {
   if (!context) return;
 
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  const frameContext = layer.ref.current?.getContext("2d");
+  if (frameContext) {
+    frameContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    console.log("clear")
+  }
 
-  drawFrame(layer, x, y);
+  if (!is_end){
+    console.log("drawFrame")
+    drawFrame(layer, x, y);
+  }
+  else{
+    console.log("not drawFigure")
+  }
 
   let currentX = x - SIZE;
   let currentY = y - SIZE;
@@ -183,67 +192,6 @@ export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, direc
       break;
     }
   }
-  context.stroke();
-}
-
-
-
-
-
-//こっから下はアニメーション関係(未完成)
-
-const ChangeFigure02ToAnimation = (x:number, y:number) => {
-  const animation: Position[] = new Array(PROCESS_SPAN * 2).fill({ x: 0, y: 0 });
-  const changeSpan = PROCESS_SPAN / 4;
-  for (let i = 0; i < PROCESS_SPAN * i; i++) {
-    if (i < changeSpan) { 
-      animation[i] = { x: x - SIZE / 2, y: y + SIZE / 2 + SPEED * i  };
-    }
-    if (i >= changeSpan && i < changeSpan * 2) {
-      animation[i] = { x: x - SIZE / 2 + SPEED * (i - changeSpan), y: y + SIZE / 2 };
-    }
-    if (i >= changeSpan * 2 && i < changeSpan * 3) {
-      animation[i] = { x: x + SIZE / 2, y: y - SIZE / 2 - SPEED * (i - changeSpan * 2)};
-    }
-    if (i >= changeSpan * 3 && i < changeSpan * 4) {
-      animation[i] = { x: x + SIZE / 2 - SPEED * (i - changeSpan * 3), y: y - SIZE / 2 };
-    }
-    if (i >= changeSpan * 4) {
-      animation[i] = animation[i - changeSpan * 4];
-    }
-  }
-  return animation;
-}
-
-
-
-//左上から
-export const ChangeFigureToAnimation = (figure_id: number, x:number, y:number) => {
-  switch (figure_id) {
-    case 0:
-      return ChangeFigure02ToAnimation(x, y);
-    case 1:
-      return ChangeFigure02ToAnimation(x, y);
-    case 2:
-      return ChangeFigure02ToAnimation(x, y);
-    case 3:
-      return ChangeFigure02ToAnimation(x, y);
-    default:
-      return new Array(PROCESS_SPAN * 2).fill({ x: 0, y: 0 });
-  }
-}
-
-export const DrawAnimation = (context: CanvasRenderingContext2D | null, position: Position | null, color: string, lineWidth: number) => {
-  if (!context || !position) return;
-
-  context.strokeStyle = color;
-  context.lineCap = 'round'; 
-  context.lineWidth = lineWidth * 2;
-
-  // 指定した座標に点を描画
-  context.beginPath();
-  context.moveTo(position.x, position.y);
-  context.lineTo(position.x, position.y);
   context.stroke();
 }
 

@@ -95,8 +95,6 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
 
   //自由図形描画図形の場合の再描画
   if (layer.type === Type.Free) {
-    console.log('layer.figures:', layer.figures);
-    console.log("layer_id:", layer.id);
     if (layer.figures.length === 0) return;
     const canvas = layer.ref.current;
     if (!canvas) return;
@@ -112,7 +110,7 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
 
     // 再描画
     layer.figures.forEach(figure => {
-      RedrawFreeFigure(context, layer.edge, layer, figure.x_pos, figure.y_pos);
+      RedrawFreeFigure(context, layer.edge, layer, figure.x_pos, figure.y_pos, true);
     });
 
     // ループ情報の再設定

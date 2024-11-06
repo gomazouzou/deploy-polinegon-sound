@@ -309,7 +309,7 @@ img {
   line-height: normal;
 }
 
-.colorsetting {
+.color-setting {
   display: flex;
   width: 153px;
   height: 126px;
@@ -319,7 +319,7 @@ img {
   background: #FFF;
 }
 
-.colorexplain {
+.color-explain {
   display: flex;
   height: 16px;
   padding: 4px 20px;
@@ -331,7 +331,7 @@ img {
   background: #3C00EE;
 }
 
-.colorexplain span {
+.color-explain span {
   color: #FFF;
   font-family: 'NicoMoji+v2';
   font-size: 16px;
@@ -340,7 +340,7 @@ img {
   line-height: normal;
 }
 
-.colorframe {
+.color-frame {
   display: flex;
   width: 160px;
   height: 74.753px;
@@ -352,21 +352,21 @@ img {
   background: #FFF;
 }
 
-.colorframe1 {
+.color-frame1 {
   display: flex;
   align-items: center; 
   gap: 12px;
   background: #FFF;
 }
 
-.colorframe2 {
+.color-frame2 {
   display: flex;
   align-items: center; 
   gap: 12px;
   background: #FFF;
 }
 
-.rhythmsetting {
+.rhythm-setting {
   display: flex;
   width: 405px;
   height: 126px;
@@ -376,7 +376,7 @@ img {
   background: #FFF;
 }
 
-.rhythmexplain {
+.rhythm-explain {
   display: flex;
   height: 16px;
   padding: 4px 20px;
@@ -388,7 +388,7 @@ img {
   background: #3C00EE;
 }
 
-.rhythmexplain span {
+.rhythm-explain span {
   color: #FFF;
   font-family: 'NicoMoji+v2';
   font-size: 16px;
@@ -397,7 +397,7 @@ img {
   line-height: normal;
 }
 
-.figureframe {
+.figure-frame {
   width: 405px;
   height: 75px;
   gap: 20px;
@@ -418,6 +418,7 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 .dialog-wrapper {
@@ -699,14 +700,16 @@ img {
 }
 .start-stop-frame {
   position: relative;
-  left: 1080px;
+  left: 1008px;
   top: 170px;
   width: 58px;
   height: 58px;
   z-index: 1;
   display: flex;
   justify-content: center; 
-  align-items: center;          
+  gap :20px;
+  align-items: center;   
+  z-index: 1;       
 }
 
 .quantize-selector {
@@ -777,6 +780,27 @@ img {
 
 .width-value-dialog span {
   color: #000;
+  font-family: 'NicoMoji+v2';
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.reset-button {
+  display: flex;
+  height: 36px;
+  padding: 4px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #3C00EE;
+}
+
+.reset-button span {
+  color: #FFF;
   font-family: 'NicoMoji+v2';
   font-size: 24px;
   font-style: normal;

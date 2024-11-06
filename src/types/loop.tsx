@@ -20,5 +20,4 @@ export type LoopInfo = {
   volume: number;
   midi: number[];
   ref: React.RefObject<HTMLCanvasElement>;
-  animation: (Position | null)[];
 };
