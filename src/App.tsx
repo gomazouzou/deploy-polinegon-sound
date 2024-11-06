@@ -29,7 +29,6 @@ function App() {
   const [currentFigure, setCurrentFigure] = useState(0);
   //現在鳴るループ再生の情報
   const [loops, setLoops] = useState<LoopInfo[]>([]);
-  const beatCountRef = useRef<number>(0);
   const [totalLoop, setTotalLoop] = useState(0);
   //マウスのX,Y座座標
   const mousePositionRef = useRef({ x: 0, y: 0 });
@@ -171,13 +170,13 @@ function App() {
   },[clickFigureDrawing]);
 
 
-  const UpdateBeatCount = () => {
+  const UpdateBeatCount = (beatCount: number) => {
     const canvas = currentLayerRef.current.ref.current;
 
     //線の時の処理
-    if (isDrawing.current && beatCountRef.current % (PROCESS_SPAN / quantizeRef.current) === 0 && canvas && lineAudioSamplers) {
+    if (isDrawing.current && beatCount % (PROCESS_SPAN / quantizeRef.current) === 0 && canvas && lineAudioSamplers) {
       
-      const index = beatCountRef.current / (PROCESS_SPAN / quantizeRef.current);
+      const index = beatCount / (PROCESS_SPAN / quantizeRef.current);
       const noteId = ChangeMousePosToNoteId(mousePositionRef.current.y); 
       const note = noteMapping[noteId];
 
@@ -205,9 +204,9 @@ function App() {
     }
     
     //自由描画の時の処理
-    
+
     //自由描画開始・終了の判定
-    if(waitFigureDrawing.current && beatCountRef.current === 0){
+    if(waitFigureDrawing.current && beatCount === 0){
       if(!startFigureDrawing.current){
         startFigureDrawing.current = true;
       }
@@ -254,8 +253,8 @@ function App() {
         setTotalLoop(totalLoop + 1);
       } 
     }
-    if(startFigureDrawing.current && beatCountRef.current % (PROCESS_SPAN / 16) === 0 && figureAudioSamplers){
-      const index = beatCountRef.current / (PROCESS_SPAN / 16);
+    if(startFigureDrawing.current && beatCount % (PROCESS_SPAN / 16) === 0 && figureAudioSamplers){
+      const index = beatCount / (PROCESS_SPAN / 16);
       //二つの角の場合（左上、右下）
       if(index === 0){
         currentDirectionRef.current = Direction.Down;
@@ -361,8 +360,6 @@ function App() {
       
       isClicking.current = false;
     }
-    
-    beatCountRef.current = (beatCountRef.current + 1) % (PROCESS_SPAN * 2);
   }
 
   useEffect(() => {
@@ -599,13 +596,11 @@ function App() {
           isPlaying={isPlaying}
           loops={loops}
           UpdateBeatCount={UpdateBeatCount}
-          beatCountRef={beatCountRef}
           metronomeAudioBuffer={metronomeAudioBuffer}
           accentAudioBuffer={accentAudioBuffer}
           figureAudioBuffers={figureAudioBuffers}
           lineAudioSamplers={lineAudioSamplers}
           setIsPlaying={setIsPlaying}
-          setClickFigureDrawing={setClickFigureDrawing}
           clickFigureDrawing={clickFigureDrawing}
           setLayers={setLayers}
           setTotalLayer={setTotalLayer}

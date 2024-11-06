@@ -698,19 +698,6 @@ img {
   font-weight: 400;
   line-height: normal;
 }
-.start-stop-frame {
-  position: relative;
-  left: 1008px;
-  top: 170px;
-  width: 58px;
-  height: 58px;
-  z-index: 1;
-  display: flex;
-  justify-content: center; 
-  gap :20px;
-  align-items: center;   
-  z-index: 1;       
-}
 
 .quantize-selector {
   display: flex;
@@ -787,6 +774,20 @@ img {
   line-height: normal;
 }
 
+.start-stop-frame {
+  position: relative;
+  left: 1008px;
+  top: 170px;
+  width: 58px;
+  height: 58px;
+  z-index: 1;
+  display: flex;
+  justify-content: center; 
+  gap :20px;
+  align-items: center;   
+  z-index: 1;       
+}
+
 .reset-button {
   display: flex;
   height: 36px;
@@ -797,6 +798,13 @@ img {
   flex-shrink: 0;
   border-radius: 20px;
   background: #3C00EE;
+}
+.play-button-container {
+  width: 58px; 
+  height: 58px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .reset-button span {

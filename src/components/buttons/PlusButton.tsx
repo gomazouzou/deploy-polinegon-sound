@@ -4,7 +4,7 @@ import plusButton from '../../images/plus_button.png';
 
 type Props = {
   onLongPress: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const PlusButton = ({onLongPress, disabled}: Props) => {

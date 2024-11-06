@@ -4,7 +4,7 @@ import stopButton from '../../images/stop_button.png';
 
 type Props = {
   onClick: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const StopButton = ({onClick, disabled}: Props) => {

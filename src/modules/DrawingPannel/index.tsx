@@ -39,7 +39,9 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
 
   return(
     <div className='drawpannel'>
-      <QuantizeSelector quantizeRef={quantizeRef} />
+      <div style={{ visibility: currentLayer?.type === Type.Line ? 'visible' : 'hidden' }}>
+        <QuantizeSelector quantizeRef={quantizeRef} disabled={currentLayer?.type !== Type.Line}/>
+      </div>
       
       <LineWidthSlider
         layers={layers}
@@ -59,7 +61,7 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
           redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
         />
       </div>
-      
+      <div style={{ visibility: currentLayer?.type === Type.Poligone ? 'visible' : 'hidden' }}>
       <div className='rhythm-setting'>
         <div className='rhythm-explain'>
           <span>図形</span>
@@ -71,6 +73,8 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
           <Figure03Button onClick={() => setCurrentFigure(3)} style={buttonStyle(3)} disabled={currentLayer?.type !== Type.Poligone}/>
         </div>
       </div>
+      </div>
+      
     </div>
   );
 };

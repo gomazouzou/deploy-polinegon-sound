@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import * as Tone from 'tone';
 import { MinusButton } from "../../components/buttons/MinusButton.tsx";
@@ -14,14 +14,12 @@ import { BeatDisplay } from "./BeatDisplay/index.tsx";
 type Props = {
   isPlaying: boolean;
   loops: LoopInfo[];
-  UpdateBeatCount: () => void;
-  beatCountRef: React.MutableRefObject<number>;
+  UpdateBeatCount: (beatCount: number) => void;
   metronomeAudioBuffer: AudioBuffer | undefined;
   accentAudioBuffer: AudioBuffer | undefined;
   figureAudioBuffers: AudioBuffer[];
   lineAudioSamplers: Tone.Sampler[] | null;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-  setClickFigureDrawing: React.Dispatch<React.SetStateAction<boolean>>;
   clickFigureDrawing: boolean;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTotalLayer: React.Dispatch<React.SetStateAction<number>>;
@@ -37,13 +35,11 @@ export const Player = ({
     isPlaying, 
     loops, 
     UpdateBeatCount, 
-    beatCountRef, 
     metronomeAudioBuffer, 
     accentAudioBuffer,
     figureAudioBuffers, 
     lineAudioSamplers, 
     setIsPlaying, 
-    setClickFigureDrawing, 
     clickFigureDrawing,
     setLayers,
     setTotalLayer,
@@ -59,6 +55,8 @@ export const Player = ({
 
   const [playPart, setPlayPart] = useState <Tone.Part[] | null>(null);
   const [metronome, setMetronome] = useState<Tone.Part | null>(null); 
+
+  const beatCountRef = useRef(0);
 
   const onLongPressPlusButton = () => {
     setBpm(prevBpm => prevBpm + 2);
@@ -136,34 +134,48 @@ export const Player = ({
     newPlayParts.forEach(loop => loop.start(0));
   }, [loops]);
 
+  const [eventId, setEventId] = useState<number | null>(null);
+
   const startMusic = () => {
     if (!metronome) {
       const newMetronome = createMetronome();
       setMetronome(newMetronome);
-      newMetronome?.start(0);
+      const currentBeat = Tone.Transport.position; 
+      newMetronome?.start(`@${currentBeat}`);
     }
     if (!playPart) {
       const newPlayParts = initializeLoops(loops);
       setPlayPart(newPlayParts);
-      newPlayParts?.forEach(loop => loop.start(0));
+      newPlayParts?.forEach(loop => {
+        const currentBeat = Tone.Transport.position; 
+        loop.start(`@${currentBeat}`);
+      });
     }
-    Tone.Transport.scheduleRepeat(UpdateBeatCount, `${PROCESS_SPAN}n`);
+    const newEventId = Tone.Transport.scheduleRepeat(() =>
+      {
+        UpdateBeatCount(beatCountRef.current);
+        beatCountRef.current = (beatCountRef.current + 1) % (PROCESS_SPAN * 2);
+
+      }, `${PROCESS_SPAN}n`);
+
+    setEventId(newEventId);
     Tone.Transport.start();
     setIsPlaying(true);
-    setClickFigureDrawing(false);
   };
 
   const stopMusic = () => {
     playPart?.forEach(loop => loop.stop());
     metronome?.stop();
-    Tone.Transport.stop();
-    Tone.Transport.position = 0; 
-    setBeat(7);
+    Tone.Transport.pause();
+
+    if (eventId !== null) {
+      Tone.Transport.clear(eventId);
+      setEventId(null);
+    }
+
     setMetronome(null);
     setPlayPart(null);
-    beatCountRef.current = 0;
     setIsPlaying(false);
-    setClickFigureDrawing(false);
   };
 
   const onClickResetButton = () => {
@@ -188,22 +200,25 @@ export const Player = ({
         <div className = "bpmexplain">
           <span>はやさ</span>
           <div className = "bpmframe">
-            <MinusButton onLongPress={onLongPressMinusButton} disabled={clickFigureDrawing}/>
+            <MinusButton onLongPress={onLongPressMinusButton} />
             <span>{bpm} bpm</span>
-            <PlusButton onLongPress={onLongPressPlusButton} disabled={clickFigureDrawing}/>
+            <PlusButton onLongPress={onLongPressPlusButton} />
           </div>
         </div>
         <BeatDisplay beat={beat}/>
     </div>
     <div className = "start-stop-frame">
-      <div className = "reset-button" onClick={onClickResetButton}>
+      <div className = "reset-button" onClick={!clickFigureDrawing ? onClickResetButton: undefined}>
         <span>リセット</span>
       </div>
-      {
-        isPlaying ? 
-        <StopButton onClick={stopMusic} disabled={clickFigureDrawing}/> :
-        <StartButton onClick={startMusic} disabled={clickFigureDrawing}/>
-      }
+
+      <div className="play-button-container">
+        {
+          isPlaying ? 
+          <StopButton onClick={stopMusic} /> :
+          <StartButton onClick={startMusic} />
+        }
+      </div>
     </div>
     
     </>

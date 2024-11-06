@@ -4,7 +4,7 @@ import minusButton from '../../images/minus_button.png';
 
 type Props = {
   onLongPress: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const MinusButton = ({onLongPress, disabled}: Props) => {

@@ -4,13 +4,15 @@ import TabButton from "../../images/tab_button.png";
 
 type Props = {
   onClick: () => void;
+  disabled: boolean;
 }
 
-export const QuantizeUpButton = ({onClick}: Props) => {
+export const QuantizeUpButton = ({onClick, disabled}: Props) => {
   return (
     <IconButton
       aria-label="add"
       onClick={onClick}
+      disabled={disabled}
       style={{ width: 15, height: 7.5}}
     >
       <img src={TabButton} alt='tab_button'   

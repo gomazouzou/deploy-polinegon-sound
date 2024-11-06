@@ -156,9 +156,6 @@ export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, direc
   if (!is_end){
     drawFrame(layer, x, y);
   }
-  else{
-    console.log("not drawFigure")
-  }
 
   let currentX = x - SIZE;
   let currentY = y - SIZE;
