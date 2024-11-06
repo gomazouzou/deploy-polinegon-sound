@@ -390,12 +390,12 @@ function App() {
     //アニメーションの更新
     animationsRef.current.forEach(animation => {
       if (!animation.ref.current) return;
-      if (!animation.isVisible) return; 
       const context = animation.ref.current.getContext('2d');
       if (!context) return;
 
       context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       if (animation.x[beatCount] === -1 || animation.y[beatCount] === -1) return;
+      if (!animation.isVisible) return; 
       context.strokeStyle = ChangeColorToTrueColor(animation.color);
       context.lineWidth = animation.lineWidth;
 
@@ -649,11 +649,6 @@ function App() {
       }
     };  
   }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking, totalAnimation]);
-
-  useEffect(() => {
-    console.log(animationsRef.current);
-  }
-  ,[animationsRef.current]);
 
   return (
     <div className="container">
