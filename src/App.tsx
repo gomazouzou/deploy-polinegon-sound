@@ -608,7 +608,7 @@ function App() {
           });
 
           // アニメーションの設定
-          const { x: xAnimation, y: yAnimation } = setFigureAnimation(currentFigure, centerX, centerY);
+          const { xAnimation, yAnimation } = setFigureAnimation(currentFigure, centerX, centerY);
           animationsRef.current = [
             ...animationsRef.current, 
             {
@@ -710,6 +710,7 @@ function App() {
           setCurrentFigure={setCurrentFigure}  
           setDrawCount={setDrawCount}        
           layers={layers}
+          animationsRef={animationsRef}
         />
       
 

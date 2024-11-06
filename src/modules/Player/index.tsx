@@ -7,6 +7,7 @@ import { StartButton } from "../../components/buttons/StartButton.tsx";
 import { StopButton } from "../../components/buttons/StopButton.tsx";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_BPM, DEFAULT_LINE_WIDTH, MAX_BPM, MIN_BPM, PROCESS_SPAN } from "../../config/constants.tsx";
 import { ChangeFreePlayerToLoop, ChangeInstrumentIdToPlayer, ChangePlayerToLoop, ChangeSamplerToLoop } from "../../hooks/useInstrumentIdToPlayer.tsx";
+import { Animation } from "../../types/animation.tsx";
 import { Layer } from "../../types/layer.tsx";
 import { LoopInfo, Type } from "../../types/loop.tsx";
 import { BeatDisplay } from "./BeatDisplay/index.tsx";
@@ -29,6 +30,7 @@ type Props = {
   setCurrentFigure: React.Dispatch<React.SetStateAction<number>>;
   setDrawCount: React.Dispatch<React.SetStateAction<number>>;
   layers: Layer[];
+  animationsRef: React.MutableRefObject<Animation[]>;
 }
 
 export const Player = ({
@@ -49,6 +51,7 @@ export const Player = ({
     setCurrentFigure,
     setDrawCount,
     layers,
+    animationsRef,
   }: Props) => {
   const [bpm, setBpm] = useState(DEFAULT_BPM);
   const [beat, setBeat] = useState(7);
@@ -178,6 +181,8 @@ export const Player = ({
     setIsPlaying(false);
   };
 
+  const [, forceUpdate] = useState({});
+
   const onClickResetButton = () => {
     layers.forEach(layer => {
       if (!layer.ref.current) return;
@@ -192,6 +197,8 @@ export const Player = ({
     setLoops([]);
     setTotalLoop(0);
     setDrawCount(0);
+    animationsRef.current = [];
+    forceUpdate({});
   }
   
   return (

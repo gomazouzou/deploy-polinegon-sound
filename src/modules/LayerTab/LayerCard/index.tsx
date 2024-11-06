@@ -42,6 +42,7 @@ export const LayerCard = ({layer, setCurrentLayerId, isHilighted, disabled, setL
     deleteLayer(layer.id, setLoops);
   };
 
+  const [, forceUpdate] = React.useState({});
   const onClickVisibility = (e: React.MouseEvent) => {
     e.stopPropagation();
     setLayers(prevLayers => {
@@ -55,6 +56,7 @@ export const LayerCard = ({layer, setCurrentLayerId, isHilighted, disabled, setL
         ? { ...animation, isVisible: !animation.isVisible }
         : animation
     );
+    forceUpdate({});
   }
 
   return (
