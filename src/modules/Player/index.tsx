@@ -185,7 +185,7 @@ export const Player = ({
       if (!ctx) return;
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     });
-    setLayers([{id: 0, ref: React.createRef(), color:"black", lineWidth: DEFAULT_LINE_WIDTH, drawings: [], figures: [], type: Type.Line, edge:[]}]);
+    setLayers([{id: 0, ref: React.createRef(), color:"black", lineWidth: DEFAULT_LINE_WIDTH, drawings: [], figures: [], type: Type.Line, edge:[], isVisible: true}]);
     setTotalLayer(0);
     setCurrentLayerId(0);
     setCurrentFigure(0);

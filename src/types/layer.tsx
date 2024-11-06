@@ -29,4 +29,5 @@ export type Layer = {
   drawings: Drawing[];
   figures: Figure[];
   edge: (Direction | null)[];
+  isVisible: boolean;
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { CANVAS_HEIGHT, CANVAS_WIDTH, DEFAULT_LINE_WIDTH, DEFAULT_VOLUME, MAX_LINE_WIDTH, MAX_VOLUME, PROCESS_SPAN } from './config/constants.tsx';
+import { setFigureAnimation } from './functions/Animation.tsx';
 import { ChangeColorToInstrumentId } from './hooks/useColorToInstrumentId.tsx';
 import { ChangeColorToTrueColor } from './hooks/useColorToTrueColor.tsx';
 import { drawFigure00, drawFigure01, drawFigure02, drawFigure03, drawFrame, RedrawFreeFigure } from './hooks/useDrawFigure.tsx';
@@ -9,6 +10,7 @@ import { ChangeMousePosToNoteId } from './hooks/useMousePosToNoteId.tsx';
 import { DrawingPannel } from './modules/DrawingPannel/index.tsx';
 import { LayerTab } from './modules/LayerTab/index.tsx';
 import { Player } from './modules/Player/index.tsx';
+import { Animation } from './types/animation.tsx';
 import { Direction } from './types/direction.tsx';
 import { Layer, Type } from "./types/layer.tsx";
 import { LoopInfo, Position } from './types/loop.tsx';
@@ -17,7 +19,7 @@ function App() {
   const isDrawing= useRef(false);
 
   //キャンバスに反映されるすべてのレイヤー
-  const [layers, setLayers] = useState<Layer[]>([{id: 0, ref: React.createRef(), color:"black", lineWidth: DEFAULT_LINE_WIDTH, drawings: [], figures: [], type: Type.Line, edge:[]}]); 
+  const [layers, setLayers] = useState<Layer[]>([{id: 0, ref: React.createRef(), color:"black", lineWidth: DEFAULT_LINE_WIDTH, drawings: [], figures: [], type: Type.Line, edge:[], isVisible: true}]); 
   //削除したものも含めたレイヤーの通し番号
   const [totalLayer, setTotalLayer] = useState(0); 
   //現在描画を行うレイヤーの番号
@@ -68,6 +70,10 @@ function App() {
 
   //クリックの状態管理
   const isClicking = useRef(false);
+
+  //アニメーション
+  const [totalAnimation, setTotalAnimation] = useState(0);
+  const animationsRef = useRef<Animation[]>([]);
 
   const [metronomeAudioBuffer, setMetronomeAudioBuffer] = useState <AudioBuffer>();
   const [accentAudioBuffer, setAccentAudioBuffer] = useState <AudioBuffer>();
@@ -144,7 +150,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(isAddFreeDrawing);
     const layer = layers.find(layer => layer.id === currentLayerId);
     if (!layer) return;
     currentLayerRef.current = layer;
@@ -360,6 +365,25 @@ function App() {
       
       isClicking.current = false;
     }
+
+    //アニメーションの更新
+    console.log(animationsRef);
+    animationsRef.current.forEach(animation => {
+      if (!animation.ref.current) return;
+      if (!animation.isVisible) return; 
+      if (animation.x[beatCount] === -1 || animation.y[beatCount] === -1) return;
+      const context = animation.ref.current.getContext('2d');
+      if (!context) return;
+
+      context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      context.strokeStyle = ChangeColorToTrueColor(animation.color);
+      context.lineWidth = animation.lineWidth;
+
+      context.beginPath();
+      context.arc(animation.x[beatCount], animation.y[beatCount], animation.lineWidth * 1.25, 0, Math.PI * 2);
+      context.fillStyle = ChangeColorToTrueColor(animation.color);
+      context.fill();
+    });
   }
 
   useEffect(() => {
@@ -541,6 +565,22 @@ function App() {
             setTotalLoop(totalLoop + 1);
             return newLoop;
           });
+
+          // アニメーションの設定
+          const { x: xAnimation, y: yAnimation } = setFigureAnimation(currentFigure, centerX, centerY);
+          animationsRef.current = [
+            ...animationsRef.current, 
+            {
+              id: totalAnimation,
+              layerId: currentLayerId,
+              ref: React.createRef<HTMLCanvasElement>(),
+              color: layer.color,
+              lineWidth: layer.lineWidth,
+              x: xAnimation,
+              y: yAnimation,
+              isVisible: layer.isVisible,
+            }];
+          setTotalAnimation(totalAnimation + 1);
         }
         
         canvas.addEventListener('pointerdown', drawFigure);
@@ -567,7 +607,7 @@ function App() {
 
       }
     };  
-  }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking]);
+  }, [isDrawing, currentLayerId, layers, drawCount, currentFigure, clickFigureDrawing, isPlaying, totalLoop, isClicking, totalAnimation]);
 
   return (
     <div className="container">
@@ -589,6 +629,25 @@ function App() {
                 }}
               />
           )) 
+        }
+        {
+          animationsRef.current.map((animation, index) => (
+            animation.isVisible &&
+            <canvas
+              key={animation.layerId + totalLayer}
+              ref={animation.ref}
+              width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+              style={{
+                border: '1px solid black',
+                backgroundColor: "transparent",
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                pointerEvents: 'none',
+              }}
+            />
+          ))
         }
       </div> 
       
@@ -625,6 +684,7 @@ function App() {
           setClickFigureDrawing={setClickFigureDrawing}
           isPlaying={isPlaying}
           positionRef={positionRef}
+          animationsRef={animationsRef}
         />
       <LayerTab
           layers={layers}
@@ -636,6 +696,7 @@ function App() {
           setLoops={setLoops}
           clickFigureDrawing={clickFigureDrawing}
           setIsAddFreeLayer={setIsAddFreeDrawing}
+          animationsRef={animationsRef}
         />
     </div>
   );

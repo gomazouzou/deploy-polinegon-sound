@@ -2,16 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { ColorButton } from "../../../components/buttons/ColorButton.tsx";
 import { MAX_LINE_WIDTH, MIN_LINE_WIDTH } from "../../../config/constants.tsx";
 import Pencil from "../../../images/pencil.png";
+import { Animation } from "../../../types/animation.tsx";
 import { Layer } from "../../../types/layer.tsx";
 
 type Props = {
   layers: Layer[];
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  animationsRef: React.MutableRefObject<Animation[]>;
   currentLayerId: number;
   redrawLayer: (layer: Layer) => void;
 };
 
-export const LineWidthSlider = ({layers, setLayers, currentLayerId, redrawLayer}:Props) => {
+export const LineWidthSlider = ({layers, setLayers, animationsRef, currentLayerId, redrawLayer}:Props) => {
   const targetLayer = layers.find(layer => layer.id === currentLayerId);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -37,6 +39,11 @@ export const LineWidthSlider = ({layers, setLayers, currentLayerId, redrawLayer}
           ? updatedLayer
           : layer
       )
+    );
+    animationsRef.current = animationsRef.current.map(animation =>
+      animation.layerId === currentLayerId
+        ? { ...animation, lineWidth: newWidth }
+        : animation
     );
     redrawLayer(updatedLayer);
   };

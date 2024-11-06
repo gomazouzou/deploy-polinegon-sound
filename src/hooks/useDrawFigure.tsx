@@ -188,5 +188,13 @@ export const RedrawFreeFigure = (context: CanvasRenderingContext2D | null, direc
     }
   }
   context.stroke();
+
+  // 移動する点を描画
+  if (!is_end){
+    context.beginPath();
+    context.arc(currentX, currentY, layer.lineWidth * 1.25, 0, Math.PI * 2);
+    context.fillStyle = ChangeColorToTrueColor(layer.color);
+    context.fill();
+  }
 }
 

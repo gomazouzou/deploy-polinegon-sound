@@ -1,6 +1,7 @@
 import React from "react";
 
 import { ColorButton } from "../../../components/buttons/ColorButton.tsx";
+import { Animation } from "../../../types/animation.tsx";
 import { Layer } from "../../../types/layer.tsx";
 
 type Props = {
@@ -8,9 +9,10 @@ type Props = {
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   currentLayerId: number;
   redrawLayer: (layer: Layer) => void;
+  animationsRef: React.MutableRefObject<Animation[]>;
 };
 
-export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLayer}: Props) => {
+export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLayer, animationsRef}: Props) => {
   const changeLayerColor = (color: string) => {
     setLayers(prevLayers => {
       const newLayers = [...prevLayers];
@@ -19,6 +21,12 @@ export const ChangeColorPalette = ({layers, setLayers, currentLayerId, redrawLay
       redrawLayer(newLayers[targetLayerIndex]);
       return newLayers;
     });
+    
+    animationsRef.current = animationsRef.current.map(animation =>
+      animation.layerId === currentLayerId
+        ? { ...animation, color: color }
+        : animation
+    );
   };
 
   const targetLayer = layers.find(layer => layer.id === currentLayerId);

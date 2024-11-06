@@ -5,6 +5,7 @@ import { Figure01Button } from "../../components/buttons/Figure01Button.tsx";
 import { Figure02Button } from "../../components/buttons/Figure02Button.tsx";
 import { Figure03Button } from "../../components/buttons/Figure03Button.tsx";
 import { RedrawLayer } from "../../functions/Canvas.tsx";
+import { Animation } from "../../types/animation.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo, Position } from "../../types/loop.tsx";
 import { ChangeColorPalette } from "./ChangeColorPalette/index.tsx";
@@ -24,9 +25,10 @@ type Props = {
   setClickFigureDrawing: React.Dispatch<React.SetStateAction<boolean>>;
   isPlaying: boolean;
   positionRef: React.MutableRefObject<Position>;
+  animationsRef: React.MutableRefObject<Animation[]>;
 }
 
-export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLayers, currentLayerId, setLoops, quantizeRef, clickFigureDrawing, setClickFigureDrawing, isPlaying, positionRef}: Props) => { 
+export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLayers, currentLayerId, setLoops, quantizeRef, animationsRef}: Props) => { 
   const buttonStyle = (num: number) => ({
     borderRadius: 0,
     backgroundColor: isSelected(num) ? "#E0E0E0" : "transparent", 
@@ -46,6 +48,7 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
       <LineWidthSlider
         layers={layers}
         setLayers={setLayers}
+        animationsRef={animationsRef}
         currentLayerId={currentLayerId}
         redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
       />
@@ -59,6 +62,7 @@ export const DrawingPannel = ({ setCurrentFigure, currentFigure, layers, setLaye
           setLayers={setLayers}
           currentLayerId={currentLayerId}
           redrawLayer={(layer:Layer) => RedrawLayer(layer, setLoops)}
+          animationsRef={animationsRef}
         />
       </div>
       <div style={{ visibility: currentLayer?.type === Type.Poligone ? 'visible' : 'hidden' }}>

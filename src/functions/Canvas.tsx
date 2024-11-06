@@ -114,7 +114,6 @@ export const RedrawLayer = (layer: Layer, setLoops: React.Dispatch<React.SetStat
     });
 
     // ループ情報の再設定
-    console.log('color:', layer.color);
     setLoops(prevLoops => prevLoops.map(loop => {
       if (loop.layer_id === layer.id) {
         return {

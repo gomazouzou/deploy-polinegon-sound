@@ -9,16 +9,6 @@ type Props = {
 
 
 export const ColorSelector = ({setPenColor, color}: Props) => {
-  const buttonStyle = (color: string) => ({
-    borderRadius: "100%",
-    backgroundColor: isSelected(color) ?  "#E0E0E0" : "transparent",
-    width: "50px",
-    height: "50px",
-    margin: "5px"
-  });
-  
-  const isSelected = (color_i: string) => color === color_i;
-
   return (
     <>
      {['black', 'red', 'blue', 'yellow', 'green', 'orange', 'lightblue', 'purple'].map((buttonColor) => (

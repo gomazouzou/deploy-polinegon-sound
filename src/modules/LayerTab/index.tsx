@@ -2,6 +2,7 @@ import React from "react";
 import { AddButton } from "../../components/buttons/AddButton.tsx";
 import { useDisclosure } from "../../hooks/useDiscloser.tsx";
 
+import { Animation } from "../../types/animation.tsx";
 import { Layer, Type } from "../../types/layer.tsx";
 import { LoopInfo } from "../../types/loop.tsx";
 import { AddLayerDialog } from "./AddLayerDialog/index.tsx";
@@ -17,9 +18,10 @@ type Props = {
   setLoops: React.Dispatch<React.SetStateAction<LoopInfo[]>>;
   clickFigureDrawing: boolean;
   setIsAddFreeLayer: React.Dispatch<React.SetStateAction<boolean>>;
+  animationsRef: React.MutableRefObject<Animation[]>;
 }
 
-export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, totalLayer, setTotalLayer, setLoops, clickFigureDrawing, setIsAddFreeLayer}: Props) => {
+export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, totalLayer, setTotalLayer, setLoops, clickFigureDrawing, setIsAddFreeLayer, animationsRef}: Props) => {
 
   const {
     isOpen: isCOpenAddLayerDialog,
@@ -40,6 +42,7 @@ export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, 
           figures: [],
           edge: [],
           type: type,
+          isVisible: true,
         }
       ]
       return newLayers;
@@ -63,8 +66,10 @@ export const LayerTab = ({layers, setLayers, currentLayerId, setCurrentLayerId, 
       setCurrentLayerId(newCurrentIndex);
     }
 
-    //ループ情報の更新
+    // ループ情報の更新
     setLoops(prevLoops => prevLoops.filter(loop => loop.layer_id !== layerId));
+    // アニメーション情報の更新
+    animationsRef.current = animationsRef.current.filter(animation => animation.layerId !== layerId);
   };
 
   return(
