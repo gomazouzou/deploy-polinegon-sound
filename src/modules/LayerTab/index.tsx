@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AddButton } from "../../components/buttons/AddButton.tsx";
 import { useDisclosure } from "../../hooks/useDiscloser.tsx";
 
@@ -74,11 +74,6 @@ export const LayerTab = ({setClickFigureDrawing, layers, setLayers, currentLayer
     //ループ情報の更新
     setLoops(prevLoops => prevLoops.filter(loop => loop.layer_id !== layerId));
   };
-  useEffect(() => {
-    console.log(layers);
-    console.log(currentLayerId);
-  }
-  ,[layers, currentLayerId]);
 
   return(
     <>

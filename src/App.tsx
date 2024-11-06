@@ -219,7 +219,7 @@ function App() {
             { 
               id: totalLoop,
               type: Type.Free, 
-              layer_id: currentLayerId, 
+              layer_id: currentLayerRef.current.id,
               color: currentLayerRef.current.color,
               lineWidth: currentLayerRef.current.lineWidth,
               instrument: ChangeColorToInstrumentId(currentLayerRef.current.color), 
