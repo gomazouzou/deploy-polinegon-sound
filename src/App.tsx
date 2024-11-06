@@ -74,6 +74,8 @@ function App() {
   //アニメーション
   const [totalAnimation, setTotalAnimation] = useState(0);
   const animationsRef = useRef<Animation[]>([]);
+  const animationXRef = useRef<number[]>(Array(PROCESS_SPAN * 2).fill(-1));
+  const animationYRef = useRef<number[]>(Array(PROCESS_SPAN * 2).fill(-1));
 
   const [metronomeAudioBuffer, setMetronomeAudioBuffer] = useState <AudioBuffer>();
   const [accentAudioBuffer, setAccentAudioBuffer] = useState <AudioBuffer>();
@@ -179,33 +181,36 @@ function App() {
     const canvas = currentLayerRef.current.ref.current;
 
     //線の時の処理
-    if (isDrawing.current && beatCount % (PROCESS_SPAN / quantizeRef.current) === 0 && canvas && lineAudioSamplers) {
-      
-      const index = beatCount / (PROCESS_SPAN / quantizeRef.current);
-      const noteId = ChangeMousePosToNoteId(mousePositionRef.current.y); 
-      const note = noteMapping[noteId];
+    if (isDrawing.current && canvas && lineAudioSamplers) {
+      if (beatCount % (PROCESS_SPAN / quantizeRef.current) === 0) {
+        const index = beatCount / (PROCESS_SPAN / quantizeRef.current);
+        const noteId = ChangeMousePosToNoteId(mousePositionRef.current.y); 
+        const note = noteMapping[noteId];
 
-      //描画中の音符を鳴らす
-      const sampler = lineAudioSamplers[ChangeColorToInstrumentId(currentColorRef.current)];
-      if (note){
-        sampler.triggerAttackRelease(note, `${quantizeRef.current}n`);
-      }
+        //描画中の音符を鳴らす
+        const sampler = lineAudioSamplers[ChangeColorToInstrumentId(currentColorRef.current)];
+        if (note){
+          sampler.triggerAttackRelease(note, `${quantizeRef.current}n`);
+        }
 
-      //ループ音階の設定
-      switch (quantizeRef.current) {
-        case 2:
-          noteArrayRef2.current[index] = noteId;
-          break;
-        case 4:
-          noteArrayRef4.current[index] = noteId;
-          break;
-        case 8:
-          noteArrayRef8.current[index] = noteId;
-          break;
-        case 16:
-          noteArrayRef16.current[index] = noteId;
-          break;
+        //ループ音階の設定
+        switch (quantizeRef.current) {
+          case 2:
+            noteArrayRef2.current[index] = noteId;
+            break;
+          case 4:
+            noteArrayRef4.current[index] = noteId;
+            break;
+          case 8:
+            noteArrayRef8.current[index] = noteId;
+            break;
+          case 16:
+            noteArrayRef16.current[index] = noteId;
+            break;
+        }
       }
+      animationXRef.current[beatCount] = mousePositionRef.current.x;
+      animationYRef.current[beatCount] = mousePositionRef.current.y;
     }
     
     //自由描画の時の処理
@@ -367,15 +372,14 @@ function App() {
     }
 
     //アニメーションの更新
-    console.log(animationsRef);
     animationsRef.current.forEach(animation => {
       if (!animation.ref.current) return;
       if (!animation.isVisible) return; 
-      if (animation.x[beatCount] === -1 || animation.y[beatCount] === -1) return;
       const context = animation.ref.current.getContext('2d');
       if (!context) return;
 
       context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      if (animation.x[beatCount] === -1 || animation.y[beatCount] === -1) return;
       context.strokeStyle = ChangeColorToTrueColor(animation.color);
       context.lineWidth = animation.lineWidth;
 
@@ -491,6 +495,24 @@ function App() {
           noteArrayRef4.current = Array(8).fill(0);
           noteArrayRef8.current = Array(16).fill(0);
           noteArrayRef16.current = Array(32).fill(0);
+
+          // アニメーションの設定
+          animationsRef.current = [
+            ...animationsRef.current, 
+            {
+              id: totalAnimation,
+              layerId: currentLayerId,
+              ref: React.createRef<HTMLCanvasElement>(),
+              color: layer.color,
+              lineWidth: layer.lineWidth,
+              x: animationXRef.current,
+              y: animationYRef.current,
+              isVisible: layer.isVisible,
+            }
+          ];
+          setTotalAnimation(totalAnimation + 1);
+          animationXRef.current = Array(PROCESS_SPAN * 2).fill(-1);
+          animationYRef.current = Array(PROCESS_SPAN * 2).fill(-1);
         }
 
         canvas.addEventListener('pointerdown', startDrawing);
